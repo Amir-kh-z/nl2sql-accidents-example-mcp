@@ -19,7 +19,9 @@ this README pair, a rule sheet for your agent (`CLAUDE.md`) and a model-seeding 
 
 - **The app**: your clone of `Amir-kh-z/nl2sql-app-closed-core` with its Python environment already created
   (`app\install.ps1`) — the same clone your starter kit sits beside. No core changes, ever: this plugin installs
-  INTO the app's environment and is discovered through the app's own entry points.
+  INTO the app's environment and is discovered through the app's own entry points. The engine in that environment
+  should be `nl2sql-core` 1.6.0 or newer (an environment created before 1.6.0 reached the index may carry 1.5.0:
+  the actions still work there, only the sidebar page needs 1.6.0, and the installer offers the upgrade).
 - **The database working copy**: `israel_accidents.duckdb` (the sidecar `.json` files and `semantic_layer.yaml`
   beside it, same basename) at a local ASCII path. `C:\data\israel_accidents\` is the default every script
   assumes; any other path is asked for.
@@ -197,7 +199,7 @@ Hebrew deck of the channel is `docs/demo/mcp_roadsafety_he.pptx`.
 | `install-chat.bat` refuses to write the Desktop config | Claude Desktop is running → quit it fully (tray icon → Quit) and re-run, or paste the printed entry by hand |
 | Desktop shows no `roadsafety`, or an old one | restart Desktop after registering. Desktop has kept its config in three places over time (the classic `%APPDATA%\Claude`, the Store build's `%LOCALAPPDATA%\Packages\Claude_*\LocalCache\Roaming\Claude`, and the Store build's data folder `%LOCALAPPDATA%\Claude-Data\claude_*`); the installer writes the entry into every location that exists and names each file |
 | Claude Code answers `API Error: 400 Claude Code x.y.z does not support this model` | the terminal CLI is older than the model pinned in your settings → `claude update`, or pick another model with `/model`; the server does not care which model answers |
-| Claude Code shows no `roadsafety` in `/mcp` | open a NEW session / reload the VS Code window; `claude mcp get roadsafety` shows the entry; if `claude` was not on PATH the installer printed the one-line command to run by hand |
+| Claude Code shows no `roadsafety` in `/mcp` | open a NEW session / reload the VS Code window; `claude mcp get roadsafety` shows the entry. The installer registers through `claude` on PATH, else through the VS Code extension's own binary, else Claude Desktop's; all read the same user config. If it found none it printed the one-line command to run by hand |
 | "xgboost did not install", studio actions ask for xgboost | Python < 3.12 in the app's environment, or no internet → re-run `install-plugin.bat` with internet; everything else works meanwhile |
 | `site_ranking`, `what_if`, `severity_predict` refuse ("no deployed model") | run `seed-models.bat`, or train → validate → deploy in the סטודיו tab |
 | your numbers differ from the docs | another xgboost version, another data vintage, or a model trained with other parameters; `studio_models` shows what is deployed — the pinned numbers assume the two reference models |

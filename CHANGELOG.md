@@ -13,6 +13,12 @@ beside a fresh clone of the closed core and verified on it. The Python package a
 - **Docs**: README pair (English + Hebrew) written for participants — three double-clicks, the first ten minutes, the
   chat channel, the thirteen-question set, troubleshooting; `docs/DOSSIER.md` brought in from the lab workspace;
   `CLAUDE.md` re-headed for a kit that sits beside the app; GUIDE/MCP_DEMO notes where the instructor's stage leaked.
+- **Hardened during the instructor's acceptance and the clean-room run (2026-10-25)**: the Desktop guard identifies
+  Claude Desktop by path (Claude Code's engine is also `claude.exe`); the Desktop entry is written into every config
+  location Desktop has used (classic, LocalCache, `Claude-Data`); the same version is never reinstalled and a due
+  replacement names/stops the processes holding the files (`-Reinstall` repairs); `-CheckOnly` reports cleanly; the
+  engine version is checked (1.6.0 for the sidebar page, upgrade offered) and the verify step tolerates an older
+  core; Claude Code is registered through `claude` on PATH, else the VS Code extension's own binary, else Desktop's.
 - **Left out on purpose**: the seminar run-book, the deck generator, `plan_b.pdf`, the rehearsal/preflight/cassette
   tooling and the web-tunnel script (no hosted server for this database).
 

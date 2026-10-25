@@ -134,6 +134,34 @@ function Invoke-Pip([string[]]$pipArgs) {
 }
 if (-not $hasPip) { Info "  (no pip in that environment - using 'uv pip')" }
 
+# The engine itself: the plugin's sidebar page needs the pages API of nl2sql-core 1.6.0 (an older core runs the app
+# and the plugin's actions on the generic Modules page, but shows no page). An environment created before 1.6.0 was
+# on the index may still carry 1.5.0 - offer the upgrade the app's own requirements allow (>=1.0,<2.0).
+$coreVersion = ""
+$prevEap = $ErrorActionPreference
+$ErrorActionPreference = "Continue"
+try { $coreVersion = [string](@(& $venvPy -X utf8 -c "from importlib.metadata import version; print(version('nl2sql-core'))" 2>&1) | Select-Object -First 1) } catch { $coreVersion = "" }
+finally { $ErrorActionPreference = $prevEap }
+if ($coreVersion -notmatch '^\d+\.\d+') { $coreVersion = "" }
+if (-not $coreVersion) {
+    if ($CheckOnly) { Warn "  nl2sql-core is not installed in this environment" }
+    else { Die "nl2sql-core is not installed in the app's environment - run the app's install.ps1 first, then re-run this installer." }
+} else {
+    Info "  nl2sql-core $coreVersion"
+    $coreOld = $false
+    try { $coreOld = ([version]$coreVersion -lt [version]"1.6.0") } catch { $coreOld = $false }
+    if ($coreOld -and -not $CheckOnly) {
+        Warn "  nl2sql-core $coreVersion is older than 1.6.0: the app runs, but the plugin's sidebar page needs 1.6.0."
+        $answer = "y"
+        if (-not $NoPrompt) { $answer = Read-Host "  Upgrade nl2sql-core now (pip, from the public index; needs internet)? [Y/n]" }
+        if ($answer -eq "" -or $answer -match '^[yY]') {
+            $code = Invoke-Pip @("install", "--upgrade", "nl2sql-core[export,api,excel]>=1.6,<2.0", "--extra-index-url", "https://amir-kh-z.github.io/nl2sql-core/simple/")
+            if ($code -eq 0) { Good "  nl2sql-core upgraded (restart the app if it is running)" }
+            else { Warn "  the upgrade did not succeed - continuing with $coreVersion (actions work, no sidebar page)" }
+        }
+    }
+}
+
 # -- 3. install ----------------------------------------------------------------------------------------
 if ($CheckOnly) {
     Step "[3/5] -CheckOnly: nothing will be installed"
@@ -277,15 +305,24 @@ import json, sys
 from importlib.metadata import version
 from pathlib import Path
 out = {"version": version("nl2sql-roadsafety-lab")}
-from nl2sql_engine.modules import discover, discover_pages
+from nl2sql_engine.modules import discover
+try:
+    from nl2sql_engine.modules import discover_pages
+except ImportError:          # nl2sql-core < 1.6.0: no pages API (actions still work on the Modules page)
+    discover_pages = None
 reg = discover()
 mod = next((m for m in reg.modules if m.name == "roadsafety"), None)
 out["actions"] = len(mod.actions) if mod else 0
 out["problems"] = [f"{p.name}: {p.reason}" for p in reg.problems if "roadsafety" in str(p.name)]
-pages, page_problems = discover_pages()
-page = next((p for p in pages if p.name == "roadsafety"), None)
-out["page"] = bool(page) and Path(page.path, "index.html").exists()
-out["page_problems"] = [f"{p.name}: {p.reason}" for p in page_problems if "roadsafety" in str(p.name)]
+out["pages_api"] = discover_pages is not None
+if discover_pages is not None:
+    pages, page_problems = discover_pages()
+    page = next((p for p in pages if p.name == "roadsafety"), None)
+    out["page"] = bool(page) and Path(page.path, "index.html").exists()
+    out["page_problems"] = [f"{p.name}: {p.reason}" for p in page_problems if "roadsafety" in str(p.name)]
+else:
+    out["page"] = False
+    out["page_problems"] = []
 try:
     import xgboost; out["xgboost"] = xgboost.__version__
 except Exception: out["xgboost"] = None
@@ -303,8 +340,10 @@ $info = $raw | ConvertFrom-Json
 if ($info.problems -or $info.page_problems) {
     Die ("The app reports a problem with the plugin: " + ($info.problems + $info.page_problems -join " | "))
 }
-if ($info.actions -lt 1 -or -not $info.page) { Die "The plugin loaded but its actions or page are missing." }
-Good ("  nl2sql-roadsafety-lab " + $info.version + " - " + $info.actions + " actions + the page" +
+if ($info.actions -lt 1) { Die "The plugin loaded but its actions are missing." }
+if (-not $info.pages_api) { Warn "  nl2sql-core here has no pages API (older than 1.6.0): the actions work on the Modules page; the sidebar page needs the upgrade offered above." }
+elseif (-not $info.page) { Die "The plugin loaded but its page is missing." }
+Good ("  nl2sql-roadsafety-lab " + $info.version + " - " + $info.actions + $(if ($info.page) { " actions + the page" } else { " actions, no page" }) +
       $(if ($info.xgboost) { " - xgboost " + $info.xgboost } else { " - no xgboost (analytical tier)" }) +
       $(if ($info.mcp) { " - mcp " + $info.mcp } else { "" }))
 
@@ -387,9 +426,28 @@ if ($Mcp -and $mcpOk) {
     # Native commands: the preference is relaxed around them (the PS 5.1 quirk below) and the exit code decides.
     Write-Host ""
     $addLine = "claude mcp add --scope user roadsafety -e NL2SQL_ROADSAFETY_DB=""$DbPath"" -e PYTHONUTF8=1 -- ""$exe"""
-    $claudeCli = Get-Command claude -ErrorAction SilentlyContinue
-    if ($claudeCli -and -not $NoClaudeCode) {
+    # Claude Code's command: `claude` on PATH (the CLI install), else the newest binary the VS Code extension ships
+    # (.vscode\extensions\anthropic.claude-code-*\resources\native-binary\claude.exe), else the one inside Claude
+    # Desktop's Code tab (Claude-Data\claude_*\claude-code\<version>\<hash>\claude.exe). All of them read the same
+    # user-scope config (~\.claude.json), so one registration serves every Claude Code a participant uses.
+    $claudeExe = $null
+    $cli = Get-Command claude -ErrorAction SilentlyContinue
+    if ($cli) { $claudeExe = $cli.Source }
+    if (-not $claudeExe) {
+        $ext = Get-ChildItem (Join-Path $env:USERPROFILE ".vscode\extensions") -Directory -Filter "anthropic.claude-code-*" -ErrorAction SilentlyContinue |
+               Sort-Object { try { [version](($_.Name -replace '^anthropic\.claude-code-', '') -replace '-.*$', '') } catch { [version]"0.0" } } -Descending |
+               ForEach-Object { Join-Path $_.FullName "resources\native-binary\claude.exe" } | Where-Object { Test-Path $_ } | Select-Object -First 1
+        if ($ext) { $claudeExe = $ext }
+    }
+    if (-not $claudeExe -and $env:LOCALAPPDATA) {
+        $emb = Get-ChildItem (Join-Path $env:LOCALAPPDATA "Claude-Data") -Directory -Filter "claude_*" -ErrorAction SilentlyContinue |
+               ForEach-Object { Get-ChildItem (Join-Path $_.FullName "claude-code") -Recurse -Filter "claude.exe" -ErrorAction SilentlyContinue } |
+               Sort-Object LastWriteTime -Descending | Select-Object -First 1
+        if ($emb) { $claudeExe = $emb.FullName }
+    }
+    if ($claudeExe -and -not $NoClaudeCode) {
         Step "[4c] registering the chat channel with Claude Code (user scope)"
+        Info "  using $claudeExe"
         # Windows PowerShell 5.1: under $ErrorActionPreference = Stop, a native command's FIRST stderr line becomes a
         # terminating error as soon as the error stream is redirected - and `claude mcp remove` on a missing entry
         # writes exactly one (bit the kit's rehearsal 2026-10-25: the add never ran). So the preference is relaxed
@@ -398,8 +456,8 @@ if ($Mcp -and $mcpOk) {
         $prevEap = $ErrorActionPreference
         $ErrorActionPreference = "Continue"
         try {
-            $null = & claude mcp remove --scope user roadsafety 2>&1
-            $out = & claude mcp add --scope user roadsafety -e "NL2SQL_ROADSAFETY_DB=$DbPath" -e "PYTHONUTF8=1" -- "$exe" 2>&1
+            $null = & $claudeExe mcp remove --scope user roadsafety 2>&1
+            $out = & $claudeExe mcp add --scope user roadsafety -e "NL2SQL_ROADSAFETY_DB=$DbPath" -e "PYTHONUTF8=1" -- "$exe" 2>&1
             $added = ($LASTEXITCODE -eq 0)
             foreach ($line in @($out)) { Info ("    " + "$line") }
         } catch { $added = $false; Warn ("  " + $_.Exception.Message) }
@@ -413,7 +471,7 @@ if ($Mcp -and $mcpOk) {
         }
     } else {
         if ($NoClaudeCode) { Info "  Claude Code registration skipped (-NoClaudeCode). To add it later, from any folder:" }
-        else { Info "  Claude Code (terminal / VS Code) - no claude command on PATH here; once it is, from any folder:" }
+        else { Info "  Claude Code not found on this machine (no claude on PATH, no VS Code extension binary). Once installed, from any folder:" }
         Info "    $addLine"
     }
 }
