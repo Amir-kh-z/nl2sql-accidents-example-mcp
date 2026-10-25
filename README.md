@@ -56,7 +56,9 @@ Clone this repository **next to** the app — the layout the starter kit already
    slow one), once. It skips a family that already has a deployed model
    (`seed-models.bat -Force` trains again).
 
-Then **start the app** — `cd app` then `.\run.ps1` — and open <http://localhost:8000>. Plugins are read once, at
+Then **start the app** — in a **PowerShell** window, `cd app` then `.\run.ps1` — and open <http://localhost:8000>.
+(The classic Command Prompt opens a `.ps1` in an editor instead of running it; from cmd use
+`powershell -ExecutionPolicy Bypass -File run.ps1`.) Plugins are read once, at
 startup: **if the app was already running, stop it and start it again** (the symptom of forgetting is a "failed
 to import" Problem card on the Modules page, not a missing tab). In the app: Connections → add the `.duckdb` by
 absolute path (it is opened read-only) → open **🚦 מעבדת הבטיחות בדרכים** in the sidebar.
