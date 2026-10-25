@@ -97,7 +97,9 @@ Claude Code, an explicit confirm in Desktop). Design and the full catalog: `docs
 window). `/mcp` lists `roadsafety` as connected. Ask, in Hebrew: `כמה הרוגים היו ב-2024?`
 
 **Claude Desktop**: restart it (the tool catalog is read at startup); `roadsafety` appears in the tools menu of a
-new chat.
+new chat. If an answer comes back from a **web search** instead of a tool call (no table, news sites as sources), the
+model chose the web: in the chat's tools menu make sure `roadsafety` is on and turn web search off for that chat, or
+add `השתמש בכלי roadsafety` to the question. The audit file tells you which it was.
 
 **claude.ai in a browser is not available**: a browser reaches only remote connectors, and no server for this
 database is hosted anywhere (a CBS decision). The web transport in `nl2sql_roadsafety/mcp/web.py` exists for the
