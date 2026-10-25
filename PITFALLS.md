@@ -14,13 +14,29 @@ build & participants should do**. Categorized and ordered strictly reverse-chron
 | **model** (4) | "latest" is the deployed site model only by accident — mixed U · A second model family found the registry family-blind — list · The severe share TRIPLES over the era — a calibration gate w · The gate rejecting the planned default was the finding, not  |
 | **map** (4) | The empty map had three stacked causes — none visible to a D · The first non-echarts page: Leaflet + RTL + one outline file · Leaflet: add vector layers only AFTER the map has a view — o · Leaflet under Vite: `.geojson` is not a JSON module; the CSS |
 | **page** (5) | The site panel was a trap: the ✕ hid under the RTL title an · A resolved fetch was thrown away by its own effect cleanup — · The PNG path's bidi machinery guards nothing on browser-rende · The Hebrew was "already using bidi" — and still wrong: forced · Page defects only a headless DOM count catches: grouped year |
-| **packaging** (11) | Claude Desktop's Store build moved its config BACK to `%APPDA · The "Claude Desktop is running" guard fired on Claude Code — t · Windows PowerShell 5.1 turned `claude mcp remove`'s one std · Claude Desktop keeps `roadsafety-mcp.exe` running — `pip insta · Claude Desktop from the Store is an MSIX app — it never rea · `mcp` 2.x renamed FastMCP — the documented import path ra · `pip install -e` over the wheel while the app runs left a th · The wheel shipped two generations of the page: setuptools' ` · `python -m build --no-isolation` fails in the app venv (no s · `packages = [...]` does not recurse — the actions subpackage · `nl2sql-shapes` is not on the public index |
+| **packaging** (12) | `install-chat.bat` re-installed the wheel under a live `roadsafet · Claude Desktop's Store build moved its config BACK to `%APPDA · The "Claude Desktop is running" guard fired on Claude Code — t · Windows PowerShell 5.1 turned `claude mcp remove`'s one std · Claude Desktop keeps `roadsafety-mcp.exe` running — `pip insta · Claude Desktop from the Store is an MSIX app — it never rea · `mcp` 2.x renamed FastMCP — the documented import path ra · `pip install -e` over the wheel while the app runs left a th · The wheel shipped two generations of the page: setuptools' ` · `python -m build --no-isolation` fails in the app venv (no s · `packages = [...]` does not recurse — the actions subpackage · `nl2sql-shapes` is not on the public index |
 | **demo** (7) | The demo agenda slide would have sent the model to the wrong · A Hebrew deck from pptxgenjs needs a bidi post-pass — Pow · Preflight's port probe FAILED whenever no app was running — · The spike's "~2 s" was the compute, not the answer — an acti · `--virtual-time-budget` dumps a lazy-chunk SPA before its fe · Headless Edge `--dump-dom` through PowerShell's `&` captured · Chat without an API key works through the `claude` CLI — and |
 | **process** (4) | The rename had a SIXTH layer: the installer's verify blo · The version bump has a SIXTH touch point: the editable insta · A fixture table addition moved a pinned count two files away · The verification sweep ran out of credits twice — verificati |
 
 (No `license` entries — the license rules never caused a stumble; they live in `CLAUDE.md`. No pure
 `RTL` entry either — the RTL lessons live inside the `[page]`/`[map]` entries. `concurrency`/`state`/
 `model`/`process`/`page` were added to the planned seven — the material demanded them.)
+
+## 2026-10-25 · `install-chat.bat` re-installed the wheel under a live `roadsafety-mcp.exe` — WinError 32 and a half-removed package · [packaging]
+**What happened:** a dry run of the kit's chat installer while the instructor's terminal Claude Code session (step 5 of the
+acceptance) was open: step 3 "installing the plugin" died in pip's uninstall with `[WinError 32] The process cannot
+access the file because it is being used by another process: …\site-packages\nl2sql_roadsafety` — the session's
+`roadsafety-mcp.exe` had the package's files open. The installer stopped with "did not install" and the package was
+left half-removed; every participant who runs `install-chat.bat` after a first chat would hit it.
+**Root cause:** `install-chat.bat` is `install-plugin.ps1 -Mcp`, and that script always re-installed the wheel
+(`--force-reinstall`) before adding the chat tier — a reinstall of the SAME version, for nothing, exactly when a server
+process is likely alive (the 2026-10-16 entry recorded the same lock under Desktop for an editable install; the lesson
+had not reached the one-click path).
+**What the real build & participants should do:** never replace what is already there: when the installed version equals
+the wheel's, leave it (`-Reinstall` is the explicit repair). When a replacement IS due (an upgrade, a repair), look
+first for processes running from the target environment: the app must be stopped by the person; a chat session's
+`roadsafety-mcp` server can be stopped by the installer after asking (the chat reconnects on its next session). Say
+which process held what — "permission denied" from pip never names the holder.
 
 ## 2026-10-25 · Claude Desktop's Store build moved its config BACK to `%APPDATA%\Claude` — the MSIX-path detection of 0.14.1 wrote a file nobody reads · [packaging]
 **What happened:** the instructor's manual acceptance of the kit, step 6: `install-chat.bat` reported Desktop registered

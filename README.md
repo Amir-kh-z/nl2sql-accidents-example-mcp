@@ -65,7 +65,7 @@ absolute path (it is opened read-only) → open **🚦 מעבדת הבטיחות
 Without it the tab uses online OpenStreetMap tiles, and the dark data-canvas style when offline.
 
 Switches, from a terminal: `install-plugin.bat -AppPath C:\somewhere\app` · `-NoMl` · `-CheckOnly` ·
-`-FromSource` (install this source tree instead of the wheel) · `install-chat.bat -DbPath D:\x\israel_accidents.duckdb`
+`-FromSource` (install this source tree instead of the wheel) · `-Reinstall` (replace an installed copy of the same version) · `install-chat.bat -DbPath D:\x\israel_accidents.duckdb`
 · `install-chat.bat -NoClaudeCode` (Desktop only) · `seed-models.bat -Force`.
 
 ## The first ten minutes — in the app
@@ -186,6 +186,7 @@ Hebrew deck of the channel is `docs/demo/mcp_roadsafety_he.pptx`.
 | Symptom | Cause → fix |
 |---|---|
 | "No NL2SQL app found" | the kit is not beside the app, or the folder is not a clone (no `run.ps1`) → `install-plugin.bat -AppPath <path to the app>` |
+| "The plugin did not install" with `WinError 32 … being used by another process` | a running app or chat server holds the plugin's files → the installer names the holder; stop the app yourself, let the installer stop a chat server, then re-run (with `-Reinstall` if an earlier install was interrupted) |
 | "The app has no .venv" | the app's own environment was never created → run `app\install.ps1` (the installer offers to run it) |
 | the tab is missing, or a "failed to import" Problem card on the Modules page | the app was running during the install → stop it and start it again |
 | "Something is already serving port 8000" | all app copies on a machine share the port AND the data dir → one app at a time |

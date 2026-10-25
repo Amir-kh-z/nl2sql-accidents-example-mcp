@@ -13,6 +13,7 @@
 #   .\install-plugin.ps1 -AppPath C:\path\to\app
 #   .\install-plugin.ps1 -NoMl                  # skip xgboost (analytical tier only)
 #   .\install-plugin.ps1 -FromSource            # install from the source tree instead of the wheel (dev)
+#   .\install-plugin.ps1 -Reinstall             # replace an installed copy of the SAME version (a repair)
 #   .\install-plugin.ps1 -Mcp                   # also the chat channel: the MCP server + Claude Desktop registration
 #   .\install-plugin.ps1 -Mcp -DbPath C:\data\israel_accidents\israel_accidents.duckdb
 #   .\install-plugin.ps1 -Mcp -NoClaudeCode   # register with Claude Desktop only (skip `claude mcp add`)
@@ -21,6 +22,7 @@ param(
     [string]$AppPath = "",
     [switch]$NoMl,
     [switch]$FromSource,
+    [switch]$Reinstall,     # replace the installed copy even when it is already the wheel's version (repair)
     [switch]$NoPrompt,
     [switch]$CheckOnly,     # find the app + report what is installed, change nothing
     [switch]$Mcp,           # M1: install the [mcp] tier and register the server with Claude Desktop
@@ -180,9 +182,52 @@ if ($oldSummary -and $oldSummary -match "correct-by-construction") {
     Info "  (a different package named nl2sql-accidents is installed - not this plugin; left untouched)"
 }
 
-$code = Invoke-Pip @("install", "--upgrade", "--force-reinstall", "--no-deps", $target)
-if ($code -ne 0) { Die "The plugin did not install - see the messages above." }
-Good "  plugin installed"
+# Same version already installed? Then do not touch it (install-chat.bat and every re-run land here): a pip
+# reinstall replaces files that a running roadsafety-mcp.exe or the app may hold open - WinError 32 and a
+# half-removed package (bit the kit's acceptance 2026-10-25). -Reinstall forces the replacement (a repair).
+$prevEap = $ErrorActionPreference
+$ErrorActionPreference = "Continue"
+$installedVersion = ""
+try {
+    $probeOut = & $venvPy -X utf8 -c "from importlib.metadata import version; print(version('nl2sql-roadsafety-lab'))" 2>&1
+    $first = [string](@($probeOut) | Select-Object -First 1)
+    if ($first -match '^\d+\.\d+') { $installedVersion = $first.Trim() }
+} catch { $installedVersion = "" }
+finally { $ErrorActionPreference = $prevEap }
+$wheelVersion = if ($wheel) { ($wheel.BaseName -split "-")[1] } else { "" }
+$skipInstall = $false
+if ($wheel -and -not $Reinstall -and $installedVersion -and ($installedVersion -eq $wheelVersion)) {
+    Info "  already installed: $installedVersion is the packaged wheel's version - left as is (-Reinstall replaces it)"
+    $skipInstall = $true
+}
+if (-not $skipInstall) {
+    # Who holds this environment's files? The app (uvicorn) must be stopped by the person; a chat session's
+    # roadsafety-mcp server can be stopped here (the chat reconnects on its next session).
+    $appLower = $app.ToLower()
+    $holders = @(Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
+                 Where-Object { $_.CommandLine -and $_.CommandLine.ToLower().Contains($appLower + "\.venv\") -and $_.ProcessId -ne $PID })
+    $mcpHolders = @($holders | Where-Object { $_.CommandLine -match "roadsafety-mcp" })
+    $otherHolders = @($holders | Where-Object { $_.CommandLine -notmatch "roadsafety-mcp" })
+    if ($otherHolders.Count -gt 0) {
+        $otherHolders | ForEach-Object { Warn ("  running from this environment: " + $_.CommandLine.Substring(0, [Math]::Min(160, $_.CommandLine.Length))) }
+        Die "The app (or another program) is running from this environment and holds the plugin's files. Stop it (Ctrl+C in its window) and re-run."
+    }
+    if ($mcpHolders.Count -gt 0) {
+        Warn "  a chat session is holding the plugin's server (roadsafety-mcp, $($mcpHolders.Count) process(es)) - pip cannot replace files in use."
+        $answer = "y"
+        if (-not $NoPrompt) { $answer = Read-Host "  Stop them now? The chat reconnects on its next session [Y/n]" }
+        if ($answer -eq "" -or $answer -match '^[yY]') {
+            foreach ($h in $mcpHolders) { Stop-Process -Id $h.ProcessId -Force -ErrorAction SilentlyContinue }
+            Start-Sleep -Seconds 2
+            Good "  stopped"
+        } else {
+            Die "Cannot replace files in use. Close the chat sessions that use roadsafety (Claude Code / Claude Desktop) and re-run."
+        }
+    }
+    $code = Invoke-Pip @("install", "--upgrade", "--force-reinstall", "--no-deps", $target)
+    if ($code -ne 0) { Die "The plugin did not install - see the messages above. If an earlier install was interrupted, re-run with -Reinstall." }
+    Good "  plugin installed"
+}
 
 # the [ml] tier: xgboost powers the studio (train/validate/deploy) and the map's model colouring.
 # Everything else works without it, so a failure here is a warning, never a failed install.
@@ -247,7 +292,7 @@ $tmp = Join-Path $env:TEMP "nl2sql_roadsafety_check.py"
 Set-Content -LiteralPath $tmp -Value $check -Encoding UTF8
 $raw = & $venvPy -X utf8 $tmp
 Remove-Item -LiteralPath $tmp -ErrorAction SilentlyContinue
-if ($LASTEXITCODE -ne 0) { Die "The plugin is installed but the app cannot load it - see above." }
+if ($LASTEXITCODE -ne 0) { Die "The plugin is installed but the app cannot load it - see above. Re-run this installer with -Reinstall (an earlier install may have been interrupted)." }
 $info = $raw | ConvertFrom-Json
 if ($info.problems -or $info.page_problems) {
     Die ("The app reports a problem with the plugin: " + ($info.problems + $info.page_problems -join " | "))

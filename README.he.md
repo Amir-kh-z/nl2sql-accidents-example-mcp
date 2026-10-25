@@ -60,7 +60,7 @@
 הטאב משתמש באריחי OpenStreetMap מקוונים, ובסגנון קנבס-הנתונים הכהה כשאין רשת.
 
 מתגים, מטרמינל: `install-plugin.bat -AppPath C:\somewhere\app` · `-NoMl` · `-CheckOnly` · `-FromSource` (התקנה
-מעץ המקור במקום מהגלגל) · `install-chat.bat -DbPath D:\x\israel_accidents.duckdb` · `install-chat.bat -NoClaudeCode`
+מעץ המקור במקום מהגלגל) · `-Reinstall` (החלפת עותק מותקן של אותה גרסה) · `install-chat.bat -DbPath D:\x\israel_accidents.duckdb` · `install-chat.bat -NoClaudeCode`
 (Desktop בלבד) · `seed-models.bat -Force`.
 
 ## עשר הדקות הראשונות — באפליקציה
@@ -138,6 +138,7 @@
 | סימפטום | סיבה ← פתרון |
 |---|---|
 | "No NL2SQL app found" | הערכה לא ליד האפליקציה, או שהתיקייה אינה שיבוט (אין `run.ps1`) ← `install-plugin.bat -AppPath <נתיב לאפליקציה>` |
+| "The plugin did not install" עם `WinError 32 … being used by another process` | אפליקציה רצה או שרת צ׳אט מחזיקים את קובצי התוסף ← המתקין מציין מי מחזיק; עצרו את האפליקציה בעצמכם, תנו למתקין לעצור שרת צ׳אט, והריצו שוב (עם `-Reinstall` אם התקנה קודמת נקטעה) |
 | הטאב חסר, או כרטיס Problem ‏"failed to import" בעמוד ה-Modules | האפליקציה רצה בזמן ההתקנה ← עצרו והפעילו מחדש |
 | "Something is already serving port 8000" | כל עותקי האפליקציה במחשב חולקים את הפורט **ואת** תיקיית הנתונים ← אפליקציה אחת בכל פעם |
 | `install-chat.bat` מסרב לכתוב את הגדרות Desktop | Claude Desktop רץ ← סגרו לגמרי (אייקון מגש ← Quit) והריצו שוב, או הדביקו ידנית את הרשומה שהודפסה |
