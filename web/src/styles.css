@@ -1,0 +1,328 @@
+/* The main app's tokens, byte for byte (nl2sql-shapes ← nl2sql-eda ← app/design-tokens.json) — this page must
+   read as the same product in both themes. Everything below is RTL-first: logical properties only, `.ltr`
+   islands for numbers, keys and SQL. */
+:root {
+  --app-bg: #ffffff;
+  --app-text: #1a1f26;
+  --card: #f4f6f8;
+  --border: #dfe3e8;
+  --muted: #5b6673;
+  --accent: #0d9488;
+  --chip-text: #3a4552;
+  --chip-bg: #ffffff;
+  --radius: 11px;
+  --bad: #f7931e;
+  --green: #0d9488;
+  --amber: #f7931e;
+  --red: #c0392b;
+  --grey: #8b959e;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --app-bg: #0e1117;
+    --app-text: #e6edf3;
+    --card: #161b22;
+    --border: #262d38;
+    --muted: #8b98a9;
+    --accent: #37c2ac;
+    --chip-text: #e6edf3;
+    --chip-bg: #161b22;
+    /* status tokens re-tuned for #0e1117 — the light-theme mid-tones are too dark/saturated on it */
+    --bad: #f0a34a;
+    --green: #37c2ac;
+    --amber: #f0a34a;
+    --red: #ff6b6b;
+    --grey: #98a2ae;
+  }
+}
+
+* { box-sizing: border-box; }
+html { direction: rtl; }
+body {
+  margin: 0;
+  background: var(--app-bg);
+  color: var(--app-text);
+  font: 14px/1.55 -apple-system, "Segoe UI", system-ui, Arial, sans-serif;
+}
+.ltr { direction: ltr; unicode-bidi: isolate; font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); font-size: 11.5px; }
+
+.page { max-width: 1240px; margin-inline: auto; padding: 14px 18px 60px; }
+
+/* ── header ── */
+.header { border-block-end: 1px solid var(--border); padding-block-end: 10px; }
+.header-row { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.header h1 { font-size: 20px; margin: 0; }
+.header .sub { color: var(--muted); font-size: 12.5px; }
+.strip { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-block-start: 8px; }
+.chip {
+  padding: 3px 10px; border: 1px solid var(--border); border-radius: 999px;
+  background: var(--chip-bg); color: var(--chip-text); font-size: 12px;
+  white-space: nowrap; max-width: 88ch; overflow: hidden; text-overflow: ellipsis;
+}
+.chip-ok { border-color: var(--green); color: var(--green); }
+.chip-amber { border-color: var(--amber); color: #8a5a00; }
+.chip-bad { border-color: var(--red); color: var(--red); }
+.chip.busy { border-color: var(--accent); color: var(--accent); font-weight: 600; animation: pulse 1.1s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+@media (prefers-reduced-motion: reduce) { .chip.busy { animation: none; } }
+
+/* ── tabs ── */
+.tabs { display: flex; gap: 4px; margin: 14px 0 12px; border-block-end: 1px solid var(--border); flex-wrap: wrap; }
+.tabs button {
+  border: 0; background: transparent; padding: 7px 14px; font-size: 14.5px;
+  border-radius: var(--radius) var(--radius) 0 0; color: var(--app-text); cursor: pointer;
+}
+/* active tab = filled accent pill — projector-readable from the back row */
+.tabs button.on { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+
+/* ── triage ── */
+.triage { margin-block: 10px 16px; }
+.triage-form { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.triage-form label { font-size: 12.5px; color: var(--muted); }
+.triage-form input { flex: 1; min-width: 260px; }
+
+/* ── controls (forms) ── */
+.controls {
+  display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap;
+  margin: 10px 0; padding: 12px; background: var(--card);
+  border: 1px solid var(--border); border-radius: var(--radius);
+}
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field > label { font-size: 11.5px; color: var(--muted); }
+select, textarea, button, input {
+  font: inherit; color: var(--app-text); background: var(--app-bg);
+  border: 1px solid var(--border); border-radius: var(--radius); padding: 6px 9px;
+}
+select { min-width: 130px; }
+input[type="number"] { width: 92px; }
+input[type="text"] { min-width: 180px; }
+input[type="checkbox"] { width: 18px; height: 18px; padding: 0; }
+button { cursor: pointer; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+button:disabled { opacity: 0.5; cursor: default; }
+button.mini { font-size: 11.5px; padding: 2px 8px; border-radius: 999px; }
+
+/* ── panels ── */
+.panel { margin-block: 14px 22px; padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius); }
+.panel-focus { box-shadow: 0 0 0 2px var(--accent); }
+.panel-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.panel-head h2 { font-size: 17px; margin: 0; }
+.panel-head .help { color: var(--muted); font-size: 12px; flex-basis: 100%; direction: ltr; text-align: left; }
+
+/* ── the answer anatomy ── */
+.answer { margin-block-start: 8px; }
+.answer-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.answer-head h3 { font-size: 15.5px; margin: 6px 0; }
+.badge {
+  padding: 3px 10px; border-radius: 999px; font-size: 12px; border: 1px solid;
+  max-width: 100%; white-space: normal;
+}
+.badge-green { background: #e6f5f3; border-color: var(--green); color: #075e55; }
+.badge-amber { background: #fff4e0; border-color: var(--amber); color: #8a5a00; }
+.badge-red { background: #fdecea; border-color: var(--red); color: #8f2a20; }
+.badge-grey { background: #f1f3f5; border-color: var(--grey); color: #4a545e; }
+@media (prefers-color-scheme: dark) {
+  .badge-green { background: #0f2f2b; color: #9fe3d8; }
+  .badge-amber { background: #332403; color: #ffd28a; }
+  .badge-red { background: #3a1410; color: #f3a79d; }
+  .badge-grey { background: #20262d; color: #c7cfd7; }
+}
+.ribbon {
+  margin: 6px 0 10px; padding-block: 8px; padding-inline: 26px 12px; list-style: "• "; background: #fff9ee;
+  border-inline-start: 4px solid var(--amber); border-radius: 6px; font-size: 12.5px; color: #5b4a1e;
+}
+@media (prefers-color-scheme: dark) { .ribbon { background: #2a2210; color: #f1dcb0; } .chip-amber { color: #ffd28a; } }
+.tab-body[hidden] { display: none; }
+.ribbon li { margin: 2px 0; }
+img.png { max-width: 100%; height: auto; border: 1px solid var(--border); border-radius: 6px; background: #fff; }
+details.face { margin-block: 8px; }
+details.face > summary { cursor: pointer; color: var(--accent); font-size: 13px; }
+pre.sql {
+  background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 10px;
+  font: 12px/1.45 ui-monospace, Consolas, monospace; overflow-x: auto; text-align: left; white-space: pre;
+}
+.basis { font: 11.5px ui-monospace, Consolas, monospace; color: var(--muted); text-align: left; }
+.credit { margin-block-start: 8px; font-size: 12px; color: var(--muted); border-block-start: 1px dashed var(--border); padding-block-start: 6px; }
+.lab-line { margin-block-start: 8px; font-size: 12px; color: var(--muted); }
+.note-row { margin-block-start: 6px; }
+.note { margin-block-start: 4px; font-size: 12px; color: var(--muted); }
+
+/* ── tables ── */
+/* max-height engages the sticky th on long (expanded) tables — without a scroll container the header never sticks */
+.table-wrap { overflow-x: auto; overflow-y: auto; max-height: 70vh; margin-block: 6px; }
+table { border-collapse: collapse; font-size: 12.5px; direction: ltr; }
+th, td { border-block-end: 1px solid var(--border); padding: 4px 8px; text-align: left; white-space: nowrap; }
+th { color: var(--muted); font-weight: 600; position: sticky; top: 0; background: var(--card); z-index: 1; text-align: start; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+table td:first-child { font-weight: 600; }
+tbody tr:hover td { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+/* the :hover variant (0,2,3) outranks the hover rule (0,1,3) so selection survives the pointer */
+tr.selected td, tbody tr.selected:hover td { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+
+/* ── cards ── */
+.card { border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; margin-block: 8px; background: var(--card); }
+.card h3 { margin: 4px 0 8px; font-size: 16px; }
+.card p { margin: 4px 0; }
+.card ul { margin: 4px 0; padding-inline-start: 22px; }
+.card-refusal { border-color: var(--red); border-inline-start-width: 5px; }
+.card-route { border-color: var(--accent); border-inline-start-width: 5px; }
+.card-answer { border-inline-start: 5px solid var(--grey); }
+.route-btn { border-color: var(--accent); color: var(--accent); font-weight: 600; padding: 2px 10px; border-radius: 999px; margin-inline-start: 6px; }
+
+/* ── states ── */
+.error { border: 1px solid var(--red); color: var(--red); background: #fdecea; border-radius: var(--radius); padding: 8px 12px; margin-block: 8px; white-space: pre-wrap; }
+@media (prefers-color-scheme: dark) { .error { background: #3a1410; color: #f3a79d; } }
+.empty { border: 1px dashed var(--border); border-radius: var(--radius); padding: 18px; color: var(--muted); margin-block: 12px; }
+.empty h3 { margin: 0 0 6px; color: var(--app-text); }
+.empty.small { padding: 8px 12px; font-size: 12.5px; }
+
+/* ── map ── */
+.mapview { margin-block: 6px; }
+/* Theme-aware map chrome (was pinned light). Policy change 2026-09-06: the page is no longer required
+   to work offline — online tile layers are now permitted, so this background is what shows before/behind
+   tiles and on the tile-less answer-face map. EXCEPTION: img.png keeps its white background — the
+   matplotlib twin is light by design. */
+.map { height: 560px; border: 1px solid var(--border); border-radius: 6px; background: var(--card); }
+.map-sub { font-size: 12px; color: var(--muted); margin-block-start: 4px; }
+.leaflet-container { font: 12px/1.4 -apple-system, "Segoe UI", system-ui, sans-serif; background: var(--card); }
+.leaflet-popup-content-wrapper { background: var(--card); color: var(--app-text); }
+.leaflet-popup-tip { background: var(--card); }
+.popup { direction: rtl; text-align: right; min-width: 220px; }
+.popup-title { font-weight: 700; margin-block-end: 2px; }
+.popup-key { font: 11.5px ui-monospace, Consolas, monospace; color: var(--muted); margin-block-end: 6px; }
+.popup .k { color: var(--muted); }
+.popup .v { font-weight: 600; color: var(--app-text); }
+.popup-caveat { font-size: 11px; color: #8a5a00; background: #fff4e0; border-radius: 4px; padding: 2px 6px; margin-block: 6px; }
+.popup-list-title { font-weight: 600; margin-block: 6px 2px; font-size: 11.5px; }
+.popup-list { margin: 0; padding-inline-start: 16px; max-height: 150px; overflow-y: auto; font-size: 11.5px; }
+.popup-more { font-size: 11px; color: var(--muted); margin-block-start: 2px; }
+.popup-handoff { border: 1px solid var(--accent); color: var(--accent); background: var(--app-bg); }
+.legend { background: color-mix(in srgb, var(--card) 92%, transparent); padding: 6px 8px; border-radius: 6px; border: 1px solid var(--border); font-size: 11px; color: var(--app-text); direction: rtl; }
+.legend-title { margin-block-end: 3px; }
+.legend .swatch { display: inline-block; width: 16px; height: 10px; margin-inline-end: 1px; }
+.legend-sub { color: var(--muted); }
+
+/* ── footer ── */
+.footer { margin-block-start: 30px; border-block-start: 1px solid var(--border); padding-block-start: 8px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+
+/* ── P10: the מפה חיה tab ── */
+.map-full { margin-inline: calc(50% - 50vw); padding-inline: 16px; }          /* full-bleed escape from .page's 1240px cap */
+.map-shell { position: relative; height: calc(100vh - 240px); min-height: 560px; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: #0b1016; }
+/* The maplibre container — a dir="ltr" island. TWO selectors on purpose: maplibre adds .maplibregl-map
+   (position: relative) to this very div, and the map chunk's CSS loads AFTER this file — equal specificity
+   would let it win and collapse the container to height 0 (found live in P10). 0-2-0 beats 0-1-0. */
+.map-shell .map-gl { position: absolute; inset: 0; width: 100%; height: 100%; }
+.map-toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-block: 8px; }
+.map-toolbar .field-inline { display: flex; gap: 5px; align-items: center; font-size: 12px; color: var(--muted); }
+.map-toolbar input[type="number"] { width: 78px; padding: 4px 7px; }
+.map-filters { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; font-size: 12.5px; margin-block: 6px; }
+.map-filters .group { display: flex; gap: 7px; align-items: center; padding: 3px 9px; border: 1px solid var(--border); border-radius: 999px; background: var(--card); }
+/* .color-toggle removed 2026-09-06 — MapTab migrated onto components/Seg.jsx (.seg-toggle) */
+.map-caveats { margin-block-start: 4px; }
+.map-caveats > summary { cursor: pointer; color: var(--accent); font-size: 12px; }
+.zhist { margin-block-start: 8px; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); max-width: 420px; }
+.zhist > summary { cursor: pointer; font-size: 12.5px; font-weight: 600; }
+.zhist svg { display: block; width: 100%; max-width: 340px; margin-block-start: 6px; }
+.zhist-line { font-size: 12px; margin-block-start: 3px; }
+.map-filters label { display: flex; gap: 3px; align-items: center; cursor: pointer; white-space: nowrap; }
+.map-filters input[type="checkbox"] { width: 14px; height: 14px; }
+.sev-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; }
+.time-slider { display: flex; gap: 10px; align-items: center; flex: 1; min-width: 300px; }
+.time-slider input[type="range"] { flex: 1; direction: ltr; padding: 0; }
+.time-slider .years { font-variant-numeric: tabular-nums; min-width: 86px; text-align: center; }
+.map-overlay-tl { position: absolute; z-index: 5; top: 10px; inset-inline-start: 10px; display: flex; flex-direction: column; gap: 6px; max-width: 300px; }
+.map-overlay-br { position: absolute; z-index: 5; bottom: 8px; inset-inline-start: 10px; }
+.map-legend { background: rgba(13, 17, 23, 0.82); color: #dfe6ee; border: 1px solid #2c3947; border-radius: 8px; padding: 7px 10px; font-size: 11.5px; direction: rtl; }
+.map-legend .row { display: flex; gap: 6px; align-items: center; margin-block: 2px; }
+.map-credit { background: rgba(13, 17, 23, 0.82); color: #aeb9c5; border: 1px solid #2c3947; border-radius: 8px; padding: 4px 9px; font-size: 10.5px; direction: rtl; }
+.map-search { position: relative; }
+.map-search input { min-width: 230px; padding: 5px 9px; }
+.map-search .results { position: absolute; z-index: 9; inset-inline-start: 0; top: 34px; min-width: 260px; max-height: 260px; overflow-y: auto; background: var(--app-bg); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,0.18); }
+.map-search .results button { display: block; width: 100%; border: 0; border-radius: 0; background: transparent; text-align: start; padding: 6px 10px; font-size: 12.5px; }
+.map-search .results button:hover { background: var(--card); }
+.map-search .kind { color: var(--muted); font-size: 11px; margin-inline-start: 6px; }
+.deck-tooltip { direction: rtl; text-align: right; font-size: 12px; }
+.site-panel { position: absolute; z-index: 6; top: 10px; inset-inline-end: 10px; width: 360px; max-width: calc(100% - 20px); max-height: calc(100% - 20px); overflow-y: auto; background: var(--app-bg); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+/* RTL: inline-END = the panel's LEFT edge — away from the title, which starts at the right (P10 live fix:
+   inline-start parked the ✕ under the title's first characters, effectively unclickable/invisible) */
+.site-panel .close { position: absolute; top: 7px; inset-inline-end: 8px; width: 26px; height: 26px;
+  border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 0;
+  font-size: 13px; line-height: 1; color: var(--app-text); cursor: pointer; z-index: 2; }
+.site-panel .close:hover { border-color: var(--red); color: var(--red); }
+.site-panel h3 { margin: 2px 0 2px; font-size: 15px; padding-inline-end: 34px; }
+.site-panel .key { font: 11px ui-monospace, Consolas, monospace; color: var(--muted); }
+.site-panel .kv { display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px; margin-block: 2px; }
+.site-panel .kv .k { color: var(--muted); }
+.site-panel .kv .v { font-weight: 600; }
+.site-panel .section { border-block-start: 1px dashed var(--border); margin-block-start: 8px; padding-block-start: 6px; }
+.site-panel .section h4 { margin: 0 0 4px; font-size: 12.5px; color: var(--muted); }
+.site-panel .verdict { font-size: 12.5px; font-weight: 600; margin-block: 3px; }
+.site-panel .spark { width: 100%; height: 56px; display: block; margin-block: 4px; }
+.site-panel .ribbon { font-size: 11.5px; }
+.site-panel .credit { font-size: 11px; }
+
+/* P9: the prediction chip — every model-computed answer announces itself */
+.model-chip {
+  display: inline-block;
+  margin: 0.35rem 0 0.15rem;
+  padding: 0.25rem 0.6rem;
+  background: #e6f4f2;
+  border: 1px solid #0d9488;
+  border-radius: 999px;
+  color: #0b6e63;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* P11: the trend composer (append to web/src/styles.css) */
+/* only rows AFTER the first get the separator — :first-of-type never matched inside the panel (sweep),
+   and row 1 alone must render exactly like every other action panel */
+.compare-row + .compare-row { border-top: 1px dashed var(--border); padding-top: 10px; margin-top: 10px; }
+.compare-row-head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.compare-min { opacity: 0.75; }
+.compare-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 10px 0 6px; }
+.compare-note { font-size: 0.78rem; color: var(--muted); }
+.seg-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.seg-toggle button { border: none; background: transparent; padding: 4px 12px; cursor: pointer; font: inherit; font-size: 0.82rem; color: var(--muted); }
+.seg-toggle button + button { border-inline-start: 1px solid var(--border); }
+.seg-toggle button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* ── visual pass: KPI stat cards (component lives elsewhere) ── */
+.stat-cards { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 16px; min-width: 140px; }
+.stat-card .stat-num { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.stat-card .stat-label { font-size: 11.5px; color: var(--muted); }
+.stat-card .delta { font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.stat-card .delta.up { color: var(--red); }    /* more accidents = bad */
+.stat-card .delta.down { color: var(--green); }
+
+/* one-line intro under a panel heading */
+.blurb { font-size: 12.5px; color: var(--muted); margin: 2px 0 8px; max-width: 78ch; }
+
+/* small static orientation table: muted th, tight padding, card background */
+table.orient { background: var(--card); font-size: 12px; }
+table.orient th, table.orient td { padding: 3px 8px; }
+table.orient th { color: var(--muted); }
+
+/* dark-mode contrast fix: white-on-accent is 2.22:1 on the dark accent #37c2ac — dark app-bg on it
+   measures 8.53:1. This block MUST stay AFTER the three light-theme `color: #fff` rules above
+   (.tabs button.on / button.primary / .seg-toggle button.on): equal specificity, so source order
+   decides — inside the top token media block it would silently lose. Light theme is untouched. */
+@media (prefers-color-scheme: dark) {
+  .tabs button.on, .seg-toggle button.on, button.primary { color: var(--app-bg); }
+}
+
+
+/* ── P13r2: the studio workbench (the rival's Models-tab cockpit, over OUR Answer anatomy) ── */
+.workbench .wb-grid { display: flex; flex-direction: column; gap: 14px; }
+.wb-panel { border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; background: var(--card); }
+.wb-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.wb-head h3 { margin: 0; font-size: 14.5px; }
+.wb-param { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.wb-param input[type="number"] { width: 84px; padding: 3px 7px; }
+.wb-param select { padding: 3px 7px; min-width: 0; }
+.wb-verbs { display: flex; gap: 6px; flex-wrap: wrap; margin: 9px 0 4px; }
+.wb-verbs button { padding: 5px 12px; font-size: 12.5px; background: var(--app-bg); }
+.wb-verbs button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.wb-panel .answer { background: var(--app-bg); border-radius: 8px; padding: 4px 10px 8px; margin-block-start: 6px; }

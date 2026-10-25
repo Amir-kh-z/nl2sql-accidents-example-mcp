@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+.pytest_cache/
+dist/
+build/
+
+# Page build workspace — the BUILT page (nl2sql_roadsafety/webdist/) IS committed (Shapes/EDA precedent:
+# installing the wheel needs no Node).
+web/node_modules/
+
+# P10: the offline basemap NEVER enters git (or the wheel — see pyproject exclude-package-data + MANIFEST).
+# web/basemap/ is the download-once cache; webdist/basemap/ is its post-build hardlink (sync-basemap.mjs).
+# The blanket *.pmtiles line also catches a misplaced extract anywhere in the tree (sweep L12).
+web/basemap/
+nl2sql_roadsafety/webdist/basemap/
+*.pmtiles
+
+# Local tool settings
+.claude/
+

@@ -1,0 +1,7 @@
+recursive-include nl2sql_roadsafety/webdist *
+include nl2sql_roadsafety/data/*.json
+include nl2sql_roadsafety/data/fonts/*
+# P10: the offline basemap is a local, downloaded artifact — never in the sdist/wheel (package-data globs
+# read the FILESYSTEM, so .gitignore alone does not keep it out).
+prune nl2sql_roadsafety/webdist/basemap
+global-exclude *.pmtiles

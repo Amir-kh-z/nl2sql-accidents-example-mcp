@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nl2sql-roadsafety-lab"
+version = "0.14.3"
+description = "Road Safety Lab (מעבדת הבטיחות בדרכים): correct-by-construction actions over the Israel road-accidents database (CBS) for the NL2SQL app — series filter, join key, denominator badge, caveats and CBS credit on every answer."
+readme = "README.md"
+requires-python = ">=3.11"
+# No engine dependency on purpose: this package is installed into the app venv that already provides
+# nl2sql-core; `requires_core` in the Module declaration is the compatibility contract. numpy,
+# matplotlib and python-bidi are borrowed from the host and imported lazily inside the functions
+# that need them.
+dependencies = []
+
+[project.optional-dependencies]
+ml = ["xgboost"]            # studio tier (P4+); xgboost wheels need Python >= 3.12
+mcp = ["mcp>=2,<3"]         # M1: the chat channel (Claude Desktop / Claude Code) — the SDK's 2.x API (MCPServer)
+dev = ["pytest", "build"]
+
+# M1: the MCP server as a console script — what Claude Desktop / Claude Code launch over stdio.
+# Lives in the app venv (it imports the engine in-process); needs the [mcp] extra.
+[project.scripts]
+roadsafety-mcp = "nl2sql_roadsafety.mcp.server:main"
+
+# Installing the package IS the registration: the app discovers this entry point.
+[project.entry-points."nl2sql.modules"]
+roadsafety = "nl2sql_roadsafety:MODULE"
+
+# The page. The entry-point NAME is the URL segment (/page/roadsafety/) and must equal the Vite `base`
+# (web/vite.config.js); the app mounts pages at import, so installing the page needs an app restart.
+[project.entry-points."nl2sql.pages"]
+roadsafety = "nl2sql_roadsafety.page:page"
+
+[tool.setuptools]
+# EVERY subpackage — an explicit list does not recurse; a missing entry silently vanishes from the wheel.
+packages = ["nl2sql_roadsafety", "nl2sql_roadsafety.actions", "nl2sql_roadsafety.studio", "nl2sql_roadsafety.mcp"]
+
+[tool.setuptools.package-data]
+# The built page (webdist/, committed — installing the wheel needs no Node), the Israel outline (Natural Earth,
+# public domain — the ONLY data file in this package; CBS data never enters it) and the MCP knowledge resource
+# (the golden rules as text — knowledge, not data).
+nl2sql_roadsafety = ["webdist/**/*", "data/*.json", "data/fonts/*", "mcp/knowledge/*.md"]
+
+[tool.setuptools.exclude-package-data]
+# P10: the downloaded basemap sits INSIDE webdist (served over Range requests) but must never ship — the
+# wheel-sanity namelist assertion enforces this too (three independent guards with .gitignore + MANIFEST).
+nl2sql_roadsafety = ["webdist/basemap/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [".", "tests"]
