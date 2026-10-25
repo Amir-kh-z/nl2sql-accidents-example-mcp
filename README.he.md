@@ -141,6 +141,8 @@
 | הטאב חסר, או כרטיס Problem ‏"failed to import" בעמוד ה-Modules | האפליקציה רצה בזמן ההתקנה ← עצרו והפעילו מחדש |
 | "Something is already serving port 8000" | כל עותקי האפליקציה במחשב חולקים את הפורט **ואת** תיקיית הנתונים ← אפליקציה אחת בכל פעם |
 | `install-chat.bat` מסרב לכתוב את הגדרות Desktop | Claude Desktop רץ ← סגרו לגמרי (אייקון מגש ← Quit) והריצו שוב, או הדביקו ידנית את הרשומה שהודפסה |
+| Desktop לא מציג `roadsafety`, או מציג ישן | הפעילו מחדש את Desktop אחרי הרישום. Desktop קרא את ההגדרות משני מקומות לאורך הזמן (הקלאסי `%APPDATA%\Claude` וזה של גרסת ה-Store תחת `%LOCALAPPDATA%\Packages\Claude_*\LocalCache\Roaming\Claude`); המתקין כותב את הרשומה לכל מיקום שקיים ומדפיס כל קובץ |
+| Claude Code עונה `API Error: 400 Claude Code x.y.z does not support this model` | ה-CLI בטרמינל ישן מהמודל שמוגדר בהגדרות שלכם ← `claude update`, או בחרו מודל אחר ב-`/model`; לשרת לא משנה איזה מודל עונה |
 | Claude Code לא מציג `roadsafety` ב-`/mcp` | פתחו סשן **חדש** / טענו מחדש את חלון VS Code; ‏`claude mcp get roadsafety` מציג את הרשומה; אם `claude` לא היה ב-PATH, המתקין הדפיס את הפקודה להרצה ידנית |
 | "xgboost did not install", פעולות הסטודיו מבקשות xgboost | פייתון מתחת ל-3.12 בסביבת האפליקציה, או אין רשת ← הריצו שוב `install-plugin.bat` עם רשת; כל השאר עובד בינתיים |
 | `site_ranking`, ‏`what_if`, ‏`severity_predict` מסרבים ("אין מודל פרוס") | הריצו `seed-models.bat`, או אמנו ← אמתו ← פרסו בטאב הסטודיו |

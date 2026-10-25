@@ -190,7 +190,8 @@ Hebrew deck of the channel is `docs/demo/mcp_roadsafety_he.pptx`.
 | the tab is missing, or a "failed to import" Problem card on the Modules page | the app was running during the install → stop it and start it again |
 | "Something is already serving port 8000" | all app copies on a machine share the port AND the data dir → one app at a time |
 | `install-chat.bat` refuses to write the Desktop config | Claude Desktop is running → quit it fully (tray icon → Quit) and re-run, or paste the printed entry by hand |
-| Desktop shows no `roadsafety` | restart Desktop after registering; the Store (MSIX) build reads its config under `%LOCALAPPDATA%\Packages\Claude_*\…`, which the installer detects |
+| Desktop shows no `roadsafety`, or an old one | restart Desktop after registering. Desktop has read its config from two places over time (the classic `%APPDATA%\Claude` and the Store build's `%LOCALAPPDATA%\Packages\Claude_*\LocalCache\Roaming\Claude`); the installer writes the entry into every location that exists and names each file |
+| Claude Code answers `API Error: 400 Claude Code x.y.z does not support this model` | the terminal CLI is older than the model pinned in your settings → `claude update`, or pick another model with `/model`; the server does not care which model answers |
 | Claude Code shows no `roadsafety` in `/mcp` | open a NEW session / reload the VS Code window; `claude mcp get roadsafety` shows the entry; if `claude` was not on PATH the installer printed the one-line command to run by hand |
 | "xgboost did not install", studio actions ask for xgboost | Python < 3.12 in the app's environment, or no internet → re-run `install-plugin.bat` with internet; everything else works meanwhile |
 | `site_ranking`, `what_if`, `severity_predict` refuse ("no deployed model") | run `seed-models.bat`, or train → validate → deploy in the סטודיו tab |

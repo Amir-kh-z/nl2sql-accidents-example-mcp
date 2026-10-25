@@ -278,7 +278,25 @@ if ($Mcp -and $mcpOk) {
     # the path is DETECTED by the module: the Store (MSIX) build of Claude Desktop virtualizes %APPDATA% and reads
     # its config under %LOCALAPPDATA%\Packages\Claude_*\LocalCache\Roaming\Claude - a file written to the real
     # Roaming folder is silently ignored (bit us 2026-09-23). -McpConfigPath overrides (tests).
-    $cfg = if ($McpConfigPath) { $McpConfigPath } else { (& $venvPy -X utf8 -m nl2sql_roadsafety.mcp.register --print-path).Trim() }
+    # Which config file does Claude Desktop read? It has changed twice. The classic installer reads
+    # %APPDATA%\Claude; the Store (MSIX) build virtualized that into %LOCALAPPDATA%\Packages\Claude_*\LocalCache\
+    # Roaming\Claude (PITFALLS 2026-09-23); and Store build 3.6556 moved its data BACK to the real %APPDATA%\Claude,
+    # leaving a `.user-data-left.<package>` marker behind (PITFALLS 2026-10-25: the file the module's own detection
+    # wrote was never read). So the installer does not guess: it writes the same entry into EVERY location that
+    # exists on this machine - a file Desktop does not read is harmless - and names each one.
+    $cfgs = @()
+    if ($McpConfigPath) {
+        $cfgs = @($McpConfigPath)
+    } else {
+        $cfgs += (Join-Path $env:APPDATA "Claude\claude_desktop_config.json")
+        if ($env:LOCALAPPDATA) {
+            Get-ChildItem (Join-Path $env:LOCALAPPDATA "Packages") -Directory -Filter "Claude_*" -ErrorAction SilentlyContinue | ForEach-Object {
+                $virtual = Join-Path $_.FullName "LocalCache\Roaming\Claude"
+                if (Test-Path $virtual) { $cfgs += (Join-Path $virtual "claude_desktop_config.json") }
+            }
+        }
+    }
+    $cfg = $cfgs[0]
     # "Is Claude Desktop running?" - decided by PATH, not by name: Claude Code's CLI and its VS Code extension
     # binary are also called claude.exe (twelve of them on the instructor's machine during the kit's acceptance,
     # 2026-10-25), and a name match would refuse to write the config for every participant working from VS Code.
@@ -295,14 +313,17 @@ if ($Mcp -and $mcpOk) {
         $seen = @($desktopProcs | ForEach-Object { try { [string]$_.Path } catch { $_.ProcessName } } | Select-Object -Unique)
         Warn ("  (seen: " + ($seen -join "; ") + ")")
         Warn "  Quit Claude Desktop completely (tray icon -> Quit) and re-run this installer with -Mcp,"
-        Warn "  or paste this under ""mcpServers"" in $cfg :"
+        Warn ("  or paste this under ""mcpServers"" in " + ($cfgs -join " and ") + " :")
         & $venvPy -X utf8 -m nl2sql_roadsafety.mcp.register --config $cfg --exe $exe --db $DbPath --print-only | Out-Host
     } else {
-        $report = & $venvPy -X utf8 -m nl2sql_roadsafety.mcp.register --config $cfg --exe $exe --db $DbPath
-        if ($LASTEXITCODE -ne 0) { Die "  $cfg exists but is not valid JSON - fix or remove it, then re-run with -Mcp." }
-        $r = $report | ConvertFrom-Json
-        if ($r.backup) { Info "  backup: $($r.backup)" }
-        Good "  Claude Desktop: 'roadsafety' registered in $cfg (servers: $($r.servers -join ', '))"
+        foreach ($c in $cfgs) {
+            $report = & $venvPy -X utf8 -m nl2sql_roadsafety.mcp.register --config $c --exe $exe --db $DbPath
+            if ($LASTEXITCODE -ne 0) { Die "  $c exists but is not valid JSON - fix or remove it, then re-run with -Mcp." }
+            $r = $report | ConvertFrom-Json
+            if ($r.backup) { Info "  backup: $($r.backup)" }
+            Good "  Claude Desktop: 'roadsafety' registered in $c (servers: $($r.servers -join ', '))"
+        }
+        if ($cfgs.Count -gt 1) { Info "  (two locations: the classic one and the Store build's - Desktop reads one, the other is harmless)" }
         Info "  (restart Claude Desktop - the tool catalog is read when the app starts)"
     }
     # -- 4c. Claude Code (terminal / VS Code extension): the same server at USER scope, so every folder sees it.

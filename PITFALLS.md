@@ -14,13 +14,32 @@ build & participants should do**. Categorized and ordered strictly reverse-chron
 | **model** (4) | "latest" is the deployed site model only by accident — mixed U · A second model family found the registry family-blind — list · The severe share TRIPLES over the era — a calibration gate w · The gate rejecting the planned default was the finding, not  |
 | **map** (4) | The empty map had three stacked causes — none visible to a D · The first non-echarts page: Leaflet + RTL + one outline file · Leaflet: add vector layers only AFTER the map has a view — o · Leaflet under Vite: `.geojson` is not a JSON module; the CSS |
 | **page** (5) | The site panel was a trap: the ✕ hid under the RTL title an · A resolved fetch was thrown away by its own effect cleanup — · The PNG path's bidi machinery guards nothing on browser-rende · The Hebrew was "already using bidi" — and still wrong: forced · Page defects only a headless DOM count catches: grouped year |
-| **packaging** (10) | The "Claude Desktop is running" guard fired on Claude Code — t · Windows PowerShell 5.1 turned `claude mcp remove`'s one std · Claude Desktop keeps `roadsafety-mcp.exe` running — `pip insta · Claude Desktop from the Store is an MSIX app — it never rea · `mcp` 2.x renamed FastMCP — the documented import path ra · `pip install -e` over the wheel while the app runs left a th · The wheel shipped two generations of the page: setuptools' ` · `python -m build --no-isolation` fails in the app venv (no s · `packages = [...]` does not recurse — the actions subpackage · `nl2sql-shapes` is not on the public index |
+| **packaging** (11) | Claude Desktop's Store build moved its config BACK to `%APPDA · The "Claude Desktop is running" guard fired on Claude Code — t · Windows PowerShell 5.1 turned `claude mcp remove`'s one std · Claude Desktop keeps `roadsafety-mcp.exe` running — `pip insta · Claude Desktop from the Store is an MSIX app — it never rea · `mcp` 2.x renamed FastMCP — the documented import path ra · `pip install -e` over the wheel while the app runs left a th · The wheel shipped two generations of the page: setuptools' ` · `python -m build --no-isolation` fails in the app venv (no s · `packages = [...]` does not recurse — the actions subpackage · `nl2sql-shapes` is not on the public index |
 | **demo** (7) | The demo agenda slide would have sent the model to the wrong · A Hebrew deck from pptxgenjs needs a bidi post-pass — Pow · Preflight's port probe FAILED whenever no app was running — · The spike's "~2 s" was the compute, not the answer — an acti · `--virtual-time-budget` dumps a lazy-chunk SPA before its fe · Headless Edge `--dump-dom` through PowerShell's `&` captured · Chat without an API key works through the `claude` CLI — and |
 | **process** (4) | The rename had a SIXTH layer: the installer's verify blo · The version bump has a SIXTH touch point: the editable insta · A fixture table addition moved a pinned count two files away · The verification sweep ran out of credits twice — verificati |
 
 (No `license` entries — the license rules never caused a stumble; they live in `CLAUDE.md`. No pure
 `RTL` entry either — the RTL lessons live inside the `[page]`/`[map]` entries. `concurrency`/`state`/
 `model`/`process`/`page` were added to the planned seven — the material demanded them.)
+
+## 2026-10-25 · Claude Desktop's Store build moved its config BACK to `%APPDATA%\Claude` — the MSIX-path detection of 0.14.1 wrote a file nobody reads · [packaging]
+**What happened:** the instructor's manual acceptance of the kit, step 6: `install-chat.bat` reported Desktop registered
+in `…\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude\claude_desktop_config.json`, and Desktop showed a
+`roadsafety` connector — "but I think this was already there". It was: the `roadsafety-mcp.exe` processes Desktop
+spawned at 17:12 ran from the LAB venv (`dev\accidents-lab\app`), i.e. the entry written on 2026-09-23 into the
+classic `%APPDATA%\Claude\claude_desktop_config.json`. The LocalCache file had not even existed before the kit
+created it (no backup was made), so the installer's "registered" line described a file Desktop never opens.
+**Root cause:** Desktop is still the Store (MSIX) build — now 3.6556.2.0 — but since 2026-10-20 it keeps its data
+in the real `%APPDATA%\Claude` again, leaving a `.user-data-left.claude_pzs8sxrjxfjjc` marker in the old
+LocalCache folder. `register.default_config_path()` (0.14.1, written for the 2026-09-23 stumble) prefers the
+LocalCache path whenever a `Claude_*` package folder exists — exactly backwards now, and silently: writing to an
+unread file reports success.
+**What the real build & participants should do:** never guess a client's config location from one observation of
+one version; write the same entry into every location the client has ever used (a file it does not read is
+harmless) and print each path — the kit's installer now does that in PowerShell without touching the package
+(the classic path always, plus any `Packages\Claude_*\LocalCache\Roaming\Claude` that exists). The module's
+`default_config_path()` should learn the `.user-data-left.*` marker in the next version. And verify a registration
+by the process it spawns (`Get-CimInstance Win32_Process` → the exe's path), not by the installer's own message.
 
 ## 2026-10-25 · The "Claude Desktop is running" guard fired on Claude Code — the VS Code extension's engine is also `claude.exe` · [packaging]
 **What happened:** the instructor's manual acceptance of the participants' kit: no Claude Desktop tray icon, yet Task
