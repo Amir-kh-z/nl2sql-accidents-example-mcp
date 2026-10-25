@@ -323,12 +323,13 @@ if ($Mcp -and $mcpOk) {
     # the path is DETECTED by the module: the Store (MSIX) build of Claude Desktop virtualizes %APPDATA% and reads
     # its config under %LOCALAPPDATA%\Packages\Claude_*\LocalCache\Roaming\Claude - a file written to the real
     # Roaming folder is silently ignored (bit us 2026-09-23). -McpConfigPath overrides (tests).
-    # Which config file does Claude Desktop read? It has changed twice. The classic installer reads
-    # %APPDATA%\Claude; the Store (MSIX) build virtualized that into %LOCALAPPDATA%\Packages\Claude_*\LocalCache\
-    # Roaming\Claude (PITFALLS 2026-09-23); and Store build 3.6556 moved its data BACK to the real %APPDATA%\Claude,
-    # leaving a `.user-data-left.<package>` marker behind (PITFALLS 2026-10-25: the file the module's own detection
-    # wrote was never read). So the installer does not guess: it writes the same entry into EVERY location that
-    # exists on this machine - a file Desktop does not read is harmless - and names each one.
+    # Which config file does Claude Desktop read? Three locations have been true at different times: the classic
+    # installer's %APPDATA%\Claude; the Store (MSIX) build's virtualized %LOCALAPPDATA%\Packages\Claude_*\LocalCache\
+    # Roaming\Claude (PITFALLS 2026-09-23); and the Store build's real data folder %LOCALAPPDATA%\Claude-Data\
+    # claude_<package id>\, where Desktop 3.6556 keeps and REWRITES its config (PITFALLS 2026-10-25: the module's own
+    # detection wrote the LocalCache file, which Desktop never read). So the installer does not guess: it writes the
+    # same entry into EVERY location that exists on this machine - a file Desktop does not read is harmless - and
+    # names each one.
     $cfgs = @()
     if ($McpConfigPath) {
         $cfgs = @($McpConfigPath)
@@ -338,6 +339,9 @@ if ($Mcp -and $mcpOk) {
             Get-ChildItem (Join-Path $env:LOCALAPPDATA "Packages") -Directory -Filter "Claude_*" -ErrorAction SilentlyContinue | ForEach-Object {
                 $virtual = Join-Path $_.FullName "LocalCache\Roaming\Claude"
                 if (Test-Path $virtual) { $cfgs += (Join-Path $virtual "claude_desktop_config.json") }
+            }
+            Get-ChildItem (Join-Path $env:LOCALAPPDATA "Claude-Data") -Directory -Filter "claude_*" -ErrorAction SilentlyContinue | ForEach-Object {
+                $cfgs += (Join-Path $_.FullName "claude_desktop_config.json")
             }
         }
     }
@@ -368,7 +372,7 @@ if ($Mcp -and $mcpOk) {
             if ($r.backup) { Info "  backup: $($r.backup)" }
             Good "  Claude Desktop: 'roadsafety' registered in $c (servers: $($r.servers -join ', '))"
         }
-        if ($cfgs.Count -gt 1) { Info "  (two locations: the classic one and the Store build's - Desktop reads one, the other is harmless)" }
+        if ($cfgs.Count -gt 1) { Info "  ($($cfgs.Count) locations - Desktop reads one of them; the others are harmless)" }
         Info "  (restart Claude Desktop - the tool catalog is read when the app starts)"
     }
     # -- 4c. Claude Code (terminal / VS Code extension): the same server at USER scope, so every folder sees it.
