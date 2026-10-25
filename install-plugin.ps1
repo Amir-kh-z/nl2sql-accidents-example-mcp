@@ -139,8 +139,14 @@ if ($CheckOnly) {
     Step "[3/5] -CheckOnly: nothing will be installed"
     $probe = "import json;from importlib.metadata import version" +
              ";print(json.dumps({'installed': version('nl2sql-roadsafety-lab')}))"
-    try { $r = & $venvPy -X utf8 -c $probe; Good "  currently installed: $r" }
-    catch { Warn "  the plugin is not installed in this app yet" }
+    # a native command's stderr (the traceback when nothing is installed) must not reach the console: relaxed
+    # preference, merged streams, and the answer judged by its content (the PS 5.1 quirk of PITFALLS 2026-10-25)
+    $prevEap = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    $r = ""
+    try { $r = [string](@(& $venvPy -X utf8 -c $probe 2>&1) | Select-Object -First 1) } catch { $r = "" }
+    finally { $ErrorActionPreference = $prevEap }
+    if ($r -match '"installed"') { Good "  currently installed: $r" } else { Warn "  the plugin is not installed in this app yet" }
     Write-Host ""
     exit 0
 }
