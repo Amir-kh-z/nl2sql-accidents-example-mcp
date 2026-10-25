@@ -14,13 +14,28 @@ build & participants should do**. Categorized and ordered strictly reverse-chron
 | **model** (4) | "latest" is the deployed site model only by accident — mixed U · A second model family found the registry family-blind — list · The severe share TRIPLES over the era — a calibration gate w · The gate rejecting the planned default was the finding, not  |
 | **map** (4) | The empty map had three stacked causes — none visible to a D · The first non-echarts page: Leaflet + RTL + one outline file · Leaflet: add vector layers only AFTER the map has a view — o · Leaflet under Vite: `.geojson` is not a JSON module; the CSS |
 | **page** (5) | The site panel was a trap: the ✕ hid under the RTL title an · A resolved fetch was thrown away by its own effect cleanup — · The PNG path's bidi machinery guards nothing on browser-rende · The Hebrew was "already using bidi" — and still wrong: forced · Page defects only a headless DOM count catches: grouped year |
-| **packaging** (9) | Windows PowerShell 5.1 turned `claude mcp remove`'s one std · Claude Desktop keeps `roadsafety-mcp.exe` running — `pip insta · Claude Desktop from the Store is an MSIX app — it never rea · `mcp` 2.x renamed FastMCP — the documented import path ra · `pip install -e` over the wheel while the app runs left a th · The wheel shipped two generations of the page: setuptools' ` · `python -m build --no-isolation` fails in the app venv (no s · `packages = [...]` does not recurse — the actions subpackage · `nl2sql-shapes` is not on the public index |
+| **packaging** (10) | The "Claude Desktop is running" guard fired on Claude Code — t · Windows PowerShell 5.1 turned `claude mcp remove`'s one std · Claude Desktop keeps `roadsafety-mcp.exe` running — `pip insta · Claude Desktop from the Store is an MSIX app — it never rea · `mcp` 2.x renamed FastMCP — the documented import path ra · `pip install -e` over the wheel while the app runs left a th · The wheel shipped two generations of the page: setuptools' ` · `python -m build --no-isolation` fails in the app venv (no s · `packages = [...]` does not recurse — the actions subpackage · `nl2sql-shapes` is not on the public index |
 | **demo** (7) | The demo agenda slide would have sent the model to the wrong · A Hebrew deck from pptxgenjs needs a bidi post-pass — Pow · Preflight's port probe FAILED whenever no app was running — · The spike's "~2 s" was the compute, not the answer — an acti · `--virtual-time-budget` dumps a lazy-chunk SPA before its fe · Headless Edge `--dump-dom` through PowerShell's `&` captured · Chat without an API key works through the `claude` CLI — and |
 | **process** (4) | The rename had a SIXTH layer: the installer's verify blo · The version bump has a SIXTH touch point: the editable insta · A fixture table addition moved a pinned count two files away · The verification sweep ran out of credits twice — verificati |
 
 (No `license` entries — the license rules never caused a stumble; they live in `CLAUDE.md`. No pure
 `RTL` entry either — the RTL lessons live inside the `[page]`/`[map]` entries. `concurrency`/`state`/
 `model`/`process`/`page` were added to the planned seven — the material demanded them.)
+
+## 2026-10-25 · The "Claude Desktop is running" guard fired on Claude Code — the VS Code extension's engine is also `claude.exe` · [packaging]
+**What happened:** the instructor's manual acceptance of the participants' kit: no Claude Desktop tray icon, yet Task
+Manager showed several "Claude Code" rows, and `Get-Process -Name Claude` returned twelve processes — every one of them
+`…\.vscode\extensions\anthropic.claude-code-…\resources\native-binary\claude.exe`, the extension's own engine.
+`install-chat.bat` would have declared Desktop running, refused to write its config and printed the paste-by-hand
+entry — for every participant, since all of them run the installer from a VS Code with Claude Code open.
+**Root cause:** the guard matched the process NAME only. Claude Desktop's executable is `Claude.exe`; Claude Code's CLI
+and extension binary are `claude.exe`; `Get-Process -Name` is case-insensitive and exact, so both match. The rehearsal
+passed by timing luck: no extension process happened to be alive at that second.
+**What the real build & participants should do:** identify an application by its path, never by its name: Desktop lives
+under `WindowsApps\Claude_*` (Store) or `%LOCALAPPDATA%\AnthropicClaude` (classic); the extension engine under
+`.vscode\extensions\anthropic.claude-code-*`, the CLI under `.local\bin`. Exclude the known Claude Code paths, keep
+refusing on anything else named Claude (a process whose path cannot be read stays on the safe side), and print the
+path that triggered the guard so the person can judge for themselves.
 
 ## 2026-10-25 · Windows PowerShell 5.1 turned `claude mcp remove`'s one stderr line into a terminating error — the registration never ran · [packaging]
 **What happened:** the participants' kit gave `install-chat.bat` a Claude Code step: remove any stale `roadsafety`

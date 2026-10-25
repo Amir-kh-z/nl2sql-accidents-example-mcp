@@ -279,9 +279,21 @@ if ($Mcp -and $mcpOk) {
     # its config under %LOCALAPPDATA%\Packages\Claude_*\LocalCache\Roaming\Claude - a file written to the real
     # Roaming folder is silently ignored (bit us 2026-09-23). -McpConfigPath overrides (tests).
     $cfg = if ($McpConfigPath) { $McpConfigPath } else { (& $venvPy -X utf8 -m nl2sql_roadsafety.mcp.register --print-path).Trim() }
-    $desktopRunning = [bool](Get-Process -Name "Claude" -ErrorAction SilentlyContinue)
+    # "Is Claude Desktop running?" - decided by PATH, not by name: Claude Code's CLI and its VS Code extension
+    # binary are also called claude.exe (twelve of them on the instructor's machine during the kit's acceptance,
+    # 2026-10-25), and a name match would refuse to write the config for every participant working from VS Code.
+    # Desktop = any OTHER process named Claude (Store build under WindowsApps\Claude_*, classic installer under
+    # %LOCALAPPDATA%\AnthropicClaude); a process whose path cannot be read stays on the safe side (counted).
+    $desktopProcs = @(Get-Process -Name "Claude" -ErrorAction SilentlyContinue | Where-Object {
+        $procPath = ""
+        try { $procPath = [string]$_.Path } catch { $procPath = "" }
+        -not ($procPath -match 'anthropic\.claude-code|\\\.vscode\\|\\\.local\\bin\\claude\.exe$|\\claude-code\\')
+    })
+    $desktopRunning = ($desktopProcs.Count -gt 0)
     if ($desktopRunning -and -not $McpConfigPath) {
         Warn "  Claude Desktop is running - it rewrites its config file while open, so nothing was written."
+        $seen = @($desktopProcs | ForEach-Object { try { [string]$_.Path } catch { $_.ProcessName } } | Select-Object -Unique)
+        Warn ("  (seen: " + ($seen -join "; ") + ")")
         Warn "  Quit Claude Desktop completely (tray icon -> Quit) and re-run this installer with -Mcp,"
         Warn "  or paste this under ""mcpServers"" in $cfg :"
         & $venvPy -X utf8 -m nl2sql_roadsafety.mcp.register --config $cfg --exe $exe --db $DbPath --print-only | Out-Host
