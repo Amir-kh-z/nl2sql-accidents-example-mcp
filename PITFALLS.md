@@ -9,18 +9,45 @@ build & participants should do**. Categorized and ordered strictly reverse-chron
 |---|---|
 | **SQL** (14) | Feature engineering against coded columns: the "אחר" jump, t · `any_value` names, silent drops, and a national number next  · `road_km = 0` was a location on one side and "not coded" on  · Two `min()`s do not make a pair, and the sentinel list was o · The 2009 casualty-series `involved` rows are missing (15 row · Make/model DOES exist in the registry tables — only the key  · `לא ידוע` is the second-largest weather label (24,896 accide · Junction/damage-only control: 5.6 % urban, 23.3 % non-urban, · `nonurban_junction_code` exists only for `road_type_code = 3 · `traffic_adt_asof` is 2017–2024 only — `before_after` cannot · 489 pedestrians carry a vehicle-type code — bucket pedestria · "BETWEEN or no QUALIFY double-counts ~25 %" is true of the r · Segment-rate coverage is the units-CTE number: 71.5 % (55 →  · DuckDB 1.5.0 (the app's pin) mis-binds QUALIFY over an impli |
 | **API** (9) | The in-process test client has no back-channel — server-ini · "Chat from the browser" is a different product from "chat fro · The SDK derives the bearer verifier from the authorization-ser · A `confirm=true` flag gates the TOOL, not the agent — a headl · A decorator wrapper's signature IS the tool schema — an int · Caveat numbers that were true for the whole range went stale · A constant imported by name defeats a monkeypatch — the cave · Layer-0 `help` text must be plain ASCII to render predictabl · After `pip install -e`, the running app shows the plugin as  |
-| **state** (3) | The running app is a side door into the shared data dir — sc · The connection pointed at the pristine folder · Port 8000 was held by a fourth app copy |
+| **state** (4) | The rehearsal app "started" on 8010 and answered with somebod · The running app is a side door into the shared data dir — sc · The connection pointed at the pristine folder · Port 8000 was held by a fourth app copy |
 | **concurrency** (1) | "Atomic" os.replace is not atomic against Windows readers —  |
 | **model** (4) | "latest" is the deployed site model only by accident — mixed U · A second model family found the registry family-blind — list · The severe share TRIPLES over the era — a calibration gate w · The gate rejecting the planned default was the finding, not  |
 | **map** (4) | The empty map had three stacked causes — none visible to a D · The first non-echarts page: Leaflet + RTL + one outline file · Leaflet: add vector layers only AFTER the map has a view — o · Leaflet under Vite: `.geojson` is not a JSON module; the CSS |
 | **page** (5) | The site panel was a trap: the ✕ hid under the RTL title an · A resolved fetch was thrown away by its own effect cleanup — · The PNG path's bidi machinery guards nothing on browser-rende · The Hebrew was "already using bidi" — and still wrong: forced · Page defects only a headless DOM count catches: grouped year |
-| **packaging** (8) | Claude Desktop keeps `roadsafety-mcp.exe` running — `pip insta · Claude Desktop from the Store is an MSIX app — it never rea · `mcp` 2.x renamed FastMCP — the documented import path ra · `pip install -e` over the wheel while the app runs left a th · The wheel shipped two generations of the page: setuptools' ` · `python -m build --no-isolation` fails in the app venv (no s · `packages = [...]` does not recurse — the actions subpackage · `nl2sql-shapes` is not on the public index |
+| **packaging** (9) | Windows PowerShell 5.1 turned `claude mcp remove`'s one std · Claude Desktop keeps `roadsafety-mcp.exe` running — `pip insta · Claude Desktop from the Store is an MSIX app — it never rea · `mcp` 2.x renamed FastMCP — the documented import path ra · `pip install -e` over the wheel while the app runs left a th · The wheel shipped two generations of the page: setuptools' ` · `python -m build --no-isolation` fails in the app venv (no s · `packages = [...]` does not recurse — the actions subpackage · `nl2sql-shapes` is not on the public index |
 | **demo** (7) | The demo agenda slide would have sent the model to the wrong · A Hebrew deck from pptxgenjs needs a bidi post-pass — Pow · Preflight's port probe FAILED whenever no app was running — · The spike's "~2 s" was the compute, not the answer — an acti · `--virtual-time-budget` dumps a lazy-chunk SPA before its fe · Headless Edge `--dump-dom` through PowerShell's `&` captured · Chat without an API key works through the `claude` CLI — and |
 | **process** (4) | The rename had a SIXTH layer: the installer's verify blo · The version bump has a SIXTH touch point: the editable insta · A fixture table addition moved a pinned count two files away · The verification sweep ran out of credits twice — verificati |
 
 (No `license` entries — the license rules never caused a stumble; they live in `CLAUDE.md`. No pure
 `RTL` entry either — the RTL lessons live inside the `[page]`/`[map]` entries. `concurrency`/`state`/
 `model`/`process`/`page` were added to the planned seven — the material demanded them.)
+
+## 2026-10-25 · Windows PowerShell 5.1 turned `claude mcp remove`'s one stderr line into a terminating error — the registration never ran · [packaging]
+**What happened:** the participants' kit gave `install-chat.bat` a Claude Code step: remove any stale `roadsafety`
+entry, then `claude mcp add --scope user …`. On the first rehearsal it reported "did not succeed" and printed the
+one-liner; `claude mcp get roadsafety` found nothing. The add had never executed.
+**Root cause:** the installer runs under Windows PowerShell 5.1 (what the `.bat` launches) with
+`$ErrorActionPreference = "Stop"`. There, the FIRST line a native command writes to stderr becomes a terminating error
+the moment the error stream is redirected (`*> $null`, `2>&1`) — and `claude mcp remove` on a missing entry writes
+exactly one ("No MCP server named …", exit 1). The `try` caught it, `$added` stayed false and the `add` line after it
+was skipped. PowerShell 7 does not do this, so a quick check in the dev shell would never have shown it.
+**What the real build & participants should do:** around native commands whose stderr is expected, relax the preference
+(`$prevEap = $ErrorActionPreference; $ErrorActionPreference = "Continue"; try { … } finally { restore }`), merge `2>&1`
+into a variable and let `$LASTEXITCODE` decide — what the installer's pip helper already did by habit. Test one-click
+scripts under `powershell.exe`, the host the `.bat` actually uses, never only under `pwsh`.
+
+## 2026-10-25 · The rehearsal app "started" on 8010 and answered with somebody else's plugins · [state]
+**What happened:** verifying the kit on a fresh clone of the app, uvicorn was started on port 8010 (8000 holds the
+lab's stage app) and `/api/modules` answered at once — listing Ephraim's `accidents` module, the participants'
+FinOps/Security plugins and no `roadsafety`. For a minute the kit looked broken.
+**Root cause:** a third app copy (`Desktop\NL2SQL Closed Core Example`) had been serving 8010 since the day before
+(the 2026-10-24 recap even said so). uvicorn logged "Application startup complete" and only THEN failed to bind
+(WinError 10048) and shut down; every probe talked to the other process. On a machine with several app copies a
+free-looking port is an assumption — and all the copies share one data dir.
+**What the real build & participants should do:** before starting an app for a check, probe the port
+(`Get-NetTCPConnection -LocalPort N -State Listen`) and read the owner's command line; after starting, assert that the
+listener's command line IS yours before trusting an answer. The kit's README keeps the participants' simpler rule:
+one app copy at a time, on 8000.
 
 ## 2026-10-24 · "latest" is the deployed site model only by accident — mixed UTC offsets sort as text · [model]
 **What happened:** scripting the recording, `studio_validate model_id=latest` was expected to pick the newest site
