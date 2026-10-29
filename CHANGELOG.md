@@ -1,6 +1,6 @@
 # Changelog — nl2sql-roadsafety-lab (the Task-4 pathfinder)
 
-## kit — 2026-10-25 · the participants' kit (0.14.3, package unchanged)
+## kit — 2026-10-25 · the participants' kit `nl2sql-accidents-example-mcp` (0.14.3, package unchanged)
 A frozen export of the pathfinder repository at `c39991f` for the course participants, built in its own repository
 beside a fresh clone of the closed core and verified on it. The Python package and the wheel are the 0.14.3 ones.
 - **Installers**: `install-chat.bat` now also registers the server with **Claude Code** (user scope, `claude mcp add`

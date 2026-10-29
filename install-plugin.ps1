@@ -82,7 +82,7 @@ No NL2SQL app found.
 Put this plugin folder NEXT TO the app clone, for example:
 
     C:\nl2sql\app\                      <- the clone of nl2sql-app-closed-core (has run.ps1)
-    C:\nl2sql\nl2sql-roadsafety-lab\    <- this folder
+    C:\nl2sql\nl2sql-accidents-example-mcp\   <- this folder
 
 then double-click install-plugin.bat again, or run:
     .\install-plugin.ps1 -AppPath C:\nl2sql\app

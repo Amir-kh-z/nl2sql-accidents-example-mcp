@@ -1,9 +1,10 @@
-# nl2sql-roadsafety-lab — rules for every session (participants' agents included)
+# nl2sql-accidents-example-mcp — rules for every session (participants' agents included)
 
 > **What this repository is.** The complete Road Safety Lab plugin — dist `nl2sql-roadsafety-lab` · import package
 > `nl2sql_roadsafety` · module id `roadsafety` · page entry point `roadsafety` → `/page/roadsafety/` (== the Vite
 > `base`) · sidebar + MODULE label `🚦 מעבדת הבטיחות בדרכים` — exported for the course participants from the
-> pathfinder repository at version **0.14.3** (commit `c39991f`, 2026-10-25). The Python package is unchanged; the kit
+> pathfinder repository at version **0.14.3** (commit `c39991f`, 2026-10-25). The repository's name is deliberately not
+> the plugin's (no collision with anyone's own accident plugin); the Python package is unchanged; the kit
 > adds `install-plugin.*`, `install-chat.bat`, `seed-models.*`, the README pair and this file. It sits BESIDE the
 > closed-core app clone (`..\app\`) and installs INTO the app's Python environment through the app's own entry
 > points — **no core changes, ever**. The starter kit (`nl2sql-accidents-starter`, module id `accidents_starter`)
@@ -304,7 +305,7 @@ records, not instructions.
   the bump has six touch points — PITFALLS 2026-09-05) → delete `build\` → `python -m build --wheel` → the wheel into
   `release\` (one wheel per release) → commit. Published versions are immutable: never rebuild under a used number.
 
-## Commands (from this folder, `nl2sql-roadsafety-lab\`)
+## Commands (from this folder, `nl2sql-accidents-example-mcp\`)
 - Tests: `..\app\.venv\Scripts\python -m pytest -q` (≈ 45 min when the live DB is at its default path; otherwise the
   synthetic fixtures only). Quick gate: `-x -q tests\test_contract.py tests\test_page.py`.
 - Dev install (after changing Python): STOP THE APP, then `..\app\.venv\Scripts\python -m pip install -e ".[dev,ml]"`,

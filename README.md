@@ -1,4 +1,4 @@
-# nl2sql-roadsafety-lab — מעבדת הבטיחות בדרכים · the full plugin, for course participants
+# Accidents Example with MCP — מעבדת הבטיחות בדרכים · the full plugin, for course participants
 
 **English** · [עברית](README.he.md)
 
@@ -10,6 +10,10 @@ database (CBS — הלשכה המרכזית לסטטיסטיקה): thirty correc
 a governed ML studio (two model families behind validation gates), a findings ledger, and an **MCP server** that
 exposes the same instruments to Claude Code and Claude Desktop as thirteen tools. It is the plugin your starter
 kit was cut from — here you get all of it: to install, to play with, to read, and to copy from or extend.
+
+Names: the repository is `nl2sql-accidents-example-mcp`; the plugin inside it keeps its product identity —
+distribution `nl2sql-roadsafety-lab`, module id `roadsafety`, page `/page/roadsafety/`, sidebar
+🚦 מעבדת הבטיחות בדרכים — none of which collides with the starter kit or with any plugin of your own.
 
 Snapshot: plugin version **0.14.3** (the wheel in `release\`), exported from the pathfinder repository at commit
 `c39991f` on 2026-10-25. Nothing in the Python package was changed for this kit; the kit adds the installers,
@@ -40,7 +44,7 @@ Clone this repository **next to** the app — the layout the starter kit already
 <any folder>\
 ├── app\                         <- the clone of nl2sql-app-closed-core (the folder with run.ps1)
 ├── nl2sql-accidents-starter\    <- your starter kit (optional: the two plugins coexist)
-└── nl2sql-roadsafety-lab\       <- this repository
+└── nl2sql-accidents-example-mcp\   <- this repository
 ```
 
 1. **`install-plugin.bat`** — finds the app beside it, installs the plugin from the wheel in `release\`, adds
