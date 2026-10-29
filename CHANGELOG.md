@@ -19,6 +19,10 @@ beside a fresh clone of the closed core and verified on it. The Python package a
   replacement names/stops the processes holding the files (`-Reinstall` repairs); `-CheckOnly` reports cleanly; the
   engine version is checked (1.6.0 for the sidebar page, upgrade offered) and the verify step tolerates an older
   core; Claude Code is registered through `claude` on PATH, else the VS Code extension's own binary, else Desktop's.
+- **Guides (2026-10-29)**: `docs/MCP_GUIDE` (how to use the chat channel and why it exists — for the researcher who
+  already knows what to ask) and `docs/BUILD_YOUR_OWN_MCP` (the server pattern transferred to a starter-derived plugin,
+  step by step, with the three Claude Code prompts), each in Hebrew and English; the repository renamed to
+  `nl2sql-accidents-example-mcp` so it cannot collide with anyone's own plugin.
 - **Left out on purpose**: the seminar run-book, the deck generator, `plan_b.pdf`, the rehearsal/preflight/cassette
   tooling and the web-tunnel script (no hosted server for this database).
 

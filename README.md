@@ -99,7 +99,9 @@ actions in-process — **the app need not be running** — and exposes them as t
 `_trend`, `_breakdown`, `_sites`, `_site`, `_find` (a site by name), `_change_effect`, `_vehicles`, `_predict`,
 `_explain`, `_studio`, `_finding`, `_triage`, plus the golden rules as a resource and three procedure prompts.
 Every table carries a legend for its helper columns; training or deploying a model asks you first (a form in
-Claude Code, an explicit confirm in Desktop). Design and the full catalog: `docs/m1_design.md`.
+Claude Code, an explicit confirm in Desktop). Design and the full catalog: `docs/m1_design.md`. **How to use it and why it exists: `docs/MCP_GUIDE.md`**
+(Hebrew: `docs/MCP_GUIDE.he.md`). **How to build one for your own plugin: `docs/BUILD_YOUR_OWN_MCP.md`**
+(Hebrew: `docs/BUILD_YOUR_OWN_MCP.he.md`).
 
 **Claude Code** (what you already use): after `install-chat.bat`, open a **new** session (in VS Code: reload the
 window). `/mcp` lists `roadsafety` as connected. Ask, in Hebrew: `כמה הרוגים היו ב-2024?`
@@ -141,6 +143,10 @@ Hebrew deck of the channel is `docs/demo/mcp_roadsafety_he.pptx`.
 
 ## What is inside
 
+- `docs/MCP_GUIDE.md` / `docs/MCP_GUIDE.he.md` — chat with the lab: why the MCP channel exists, the thirteen tools in
+  plain words, six use cases with the prompts to type and the numbers to expect, how to read an answer, limits, CBS rules.
+- `docs/BUILD_YOUR_OWN_MCP.md` / `docs/BUILD_YOUR_OWN_MCP.he.md` — build an MCP server for your own accidents plugin:
+  the seven rules, our server as the reference, eight steps, the three Claude Code prompts, the traps, the definition of done.
 - `docs/GUIDE.md` — the field guide: every instrument, how to read it, the play curriculum (§6), the chat channel (§8).
 - `docs/DOSSIER.md` — the database knowledge base: inventory, the golden rules (`case_type_code = 1`, the composite
   key, the sentinel lists, the exposure eras), methodology. It replaces surveying the source.
