@@ -2,9 +2,6 @@
 
 **English** · [עברית](README.he.md)
 
-**Course material, shared as code and documentation.** The database (CBS licence) is never part of this
-repository, of any package, or of any cloud service; the documents quote aggregate figures only.
-
 This is the **complete** Road Safety Lab plugin for the NL2SQL closed-core app over the Israel road-accidents
 database (CBS — הלשכה המרכזית לסטטיסטיקה): thirty correct-by-construction actions, an RTL page with seven tabs,
 a governed ML studio (two model families behind validation gates), a findings ledger, and an **MCP server** that
