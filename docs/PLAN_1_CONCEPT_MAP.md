@@ -10,7 +10,7 @@ detail beyond the dossier: the methodology report in the pristine folder's `docs
 
 | # | Decision | Outcome |
 |---|---|---|
-| 0 | One plugin, two tiers | **Ratified.** One `Module`, one wheel, one page; studio actions lazy-import xgboost and return a readable `Result.error` with the pip command when `[ml]` is absent. Flag to Efraim: supersedes the old "two plugins" framing. |
+| 0 | One plugin, two tiers | **Ratified.** One `Module`, one wheel, one page; studio actions lazy-import xgboost and return a readable `Result.error` with the pip command when `[ml]` is absent. Flagged to the course owner: supersedes the old "two plugins" framing. |
 | 1 | DB working location | **`C:\data\israel_accidents\` is LIVE.** Re-point the existing `israel_accidents` connection in `%LOCALAPPDATA%\nl2sql-core\added_connections.json` (same name → same sidecar basename). Desktop folder files set read-only as a guard. |
 | 2 | Name | dist **`nl2sql-accidents`** · package `nl2sql_accidents` · module id `accidents` · **pages entry-point name `accidents`** (it becomes the URL `/page/accidents/`) · sidebar `🚦 תאונות` · product **מעבדת הבטיחות בדרכים** (Road Safety Lab). |
 | 3 | Scope | **Core: א ב ג ד ה.** Stretch (cut freely): ח two-wheelers, ז per-unit SHAP profile, ו what-if. |
@@ -26,7 +26,7 @@ guard, no small-cell suppression, no seminar-approval question. What stays: the 
 transferred (the demo runs on the user's own laptop), never in git/cloud (so nothing row-level
 is committed — screenshots in the repo are chart/ranking frames); CBS credit on every rendered output.
 
-Standing asks to Efraim (blockers for the seminar, not for the build): seminar date ·
+Standing asks to the course owner (blockers for the seminar, not for the build): seminar date ·
 the "15 steps" DoD list · whether "one plugin" is acceptable.
 
 ## 1. Verified extension-point facts the design rests on

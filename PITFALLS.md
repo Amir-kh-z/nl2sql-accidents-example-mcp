@@ -89,7 +89,7 @@ scripts under `powershell.exe`, the host the `.bat` actually uses, never only un
 
 ## 2026-10-25 · The rehearsal app "started" on 8010 and answered with somebody else's plugins · [state]
 **What happened:** verifying the kit on a fresh clone of the app, uvicorn was started on port 8010 (8000 holds the
-lab's stage app) and `/api/modules` answered at once — listing Ephraim's `accidents` module, the participants'
+lab's stage app) and `/api/modules` answered at once — listing the course owner's `accidents` module, the participants'
 FinOps/Security plugins and no `roadsafety`. For a minute the kit looked broken.
 **Root cause:** a third app copy (`Desktop\NL2SQL Closed Core Example`) had been serving 8010 since the day before
 (the 2026-10-24 recap even said so). uvicorn logged "Application startup complete" and only THEN failed to bind
@@ -230,7 +230,7 @@ model with train_until=2021 and deploy it, don't ask questions". The audit shows
 The server's instructions say "ask the person first"; a one-shot run has no person, so the instruction had no
 one to defer to. (In the unit tests and in an ordinary chat the card does appear first — the flag works as a
 PAUSE, not as a LOCK.)
-**Root cause:** a boolean the caller sets is a contract with the agent, not a lock. Ephraim's design (and
+**Root cause:** a boolean the caller sets is a contract with the agent, not a lock. The course owner's design (and
 ours) relies on the model honoring "ask first" — sound in Claude Desktop with a human reading the chat, void in
 an automation channel or under an adversarial prompt.
 **What the real build & participants should do:** keep the flag (it is what makes the model pause and explain
@@ -269,8 +269,8 @@ explicitly instead of `functools.wraps`, and pin the schema in a protocol-level 
 schema["properties"]`, the Hebrew enums present, `required == [...]`).
 
 ## 2026-09-12 · `mcp` 2.x renamed FastMCP — the documented import path raises on the current SDK · [packaging]
-**What happened:** the step-0 spike's `from mcp.server.fastmcp import FastMCP` (every tutorial, Ephraim's
-deck era) raised `ModuleNotFoundError` on the freshly installed `mcp` 2.2.0: the module exists only to point
+**What happened:** the step-0 spike's `from mcp.server.fastmcp import FastMCP` (every tutorial of the
+time) raised `ModuleNotFoundError` on the freshly installed `mcp` 2.2.0: the module exists only to point
 at the migration guide.
 **Root cause:** the SDK's 2.0 major (2026) renamed `FastMCP` → `mcp.server.mcpserver.MCPServer`, moved the
 in-memory test client to `mcp.Client(server)`, and renamed image fields (`mime_type`). A version-free
@@ -903,7 +903,7 @@ control locate PNGs via CSS at runtime.
 
 ## 2026-08-28 · `nl2sql-shapes` is not on the public index · [packaging]
 **What happened:** `pip install nl2sql-shapes --extra-index-url https://amir-kh-z.github.io/...` would
-404 — its publish commit in `C:\Users\A\dev\nl2sql-core` is unpushed (`main...origin/main [ahead 1]`).
+404 — its publish commit in the local `nl2sql-core` checkout is unpushed (`main...origin/main [ahead 1]`).
 **Root cause:** publishing to the PEP 503 index is a git push of the index repo; the local tree was
 updated, the remote was not.
 **What the real build & participants should do:** install from the local index

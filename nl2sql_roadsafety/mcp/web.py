@@ -8,8 +8,8 @@ login: the SDK's authorization-server toolkit (/.well-known metadata, /register,
 bearer middleware) around ONE small provider — a Hebrew login page asking for a display name and the shared
 passphrase (`NL2SQL_ROADSAFETY_WEB_PASSPHRASE`). The name becomes the `user` of every audit line.
 
-What this is NOT: a hosting design. Exposure beyond the two plugin owners waits for the course owner's CBS
-answer — aggregate answers and PNGs transit Anthropic's API like any chat message (README, GUIDE §8)."""
+What this is NOT: a hosting design. Aggregate answers and PNGs transit Anthropic's API like any chat
+message — the same transit the app's own chat tab has (README, GUIDE §8)."""
 from __future__ import annotations
 
 import hmac

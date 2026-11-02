@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""The tool catalog: twelve intent-grouped tools over the plugin's actions (Ephraim's rule — a tool is a
+"""The tool catalog: twelve intent-grouped tools over the plugin's actions (the course owner's rule — a tool is a
 name and an intent, the action is the computation; grouping is a design decision, not a mechanical export,
 so the model's context holds twelve descriptions instead of thirty).
 

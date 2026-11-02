@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""The MCP server: the thin SDK layer over tools.py (Ephraim's slide 8 — one protocol, every client).
+"""The MCP server: the thin SDK layer over tools.py (the course owner's slide 8 — one protocol, every client).
 
     roadsafety-mcp [--db PATH] [--data-dir DIR] [--no-images]        (console script, stdio)
     python -m nl2sql_roadsafety.mcp.server ...

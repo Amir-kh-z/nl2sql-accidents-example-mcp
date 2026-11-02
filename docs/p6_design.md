@@ -7,7 +7,7 @@ SEMINAR run safe: the cassette recorder for the chat beat, automated pre-flight 
 state can silently drift — the running app is a side door), the fresh-dir and shared-dir rehearsals with real
 timings, `docs/demo/DEMO.md` (PLAN_2 finalized), and `plan_b.pdf` (the every-beat fallback deck). No new actions.
 Version **0.6.0** (precedent: every phase bumps), commit `[P6]`, tag `v0.6`. The two PROJECTOR rehearsals stay the
-instructor's task (they need Efraim's date) — DEMO.md carries their checklist.
+instructor's task (they need the course owner's date) — DEMO.md carries their checklist.
 
 ## Facts the design rests on (verified read-only, 2026-09-02)
 
@@ -58,7 +58,7 @@ instructor's task (they need Efraim's date) — DEMO.md carries their checklist.
 5. **`docs/demo/DEMO.md`** — PLAN_2 §§0–7 finalized as the run-book: pre-flight = `tools/preflight.py` + the
    manual rows (projector, zoom, Plan-B window); per beat the EXACT inputs (the real site key, years, top_n),
    the rehearsed numbers to expect on screen, the spoken point, and the fallback; the projector-rehearsal
-   checklist (the instructor's two runs, needs Efraim's date); the cassette story (record last, replay probe,
+   checklist (the instructor's two runs, needs the course owner's date); the cassette story (record last, replay probe,
    the key-present bypass warning).
 6. **`docs/demo/plan_b.pdf`** — one landscape frame per beat from the rehearsal run's own artifacts:
    beats 1/4 = the trap/refusal cards rendered to an image frame, beats 2/3/5b = the actions' PNG twins

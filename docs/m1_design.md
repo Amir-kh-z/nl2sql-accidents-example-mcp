@@ -5,7 +5,7 @@ file is the design AND the as-built record; the acceptance state lives in `plan.
 
 ## Why
 
-Ephraim's deck (`Desktop\mcp ephraim.pptx`, read 2026-09-12) defines the second use case he wants beside the
+The course owner's deck (read 2026-09-12) defines the second use case he wants beside the
 page: the SAME actions reachable from Claude's chat and from scheduled automation, through one MCP server
 that imports the closed core **in-process** — no port 8000, no HTTP, "works when the app is off". He built it
 for his credit-risk module (20 actions → 8 intent-grouped tools; training tools need an explicit `confirm`;
@@ -14,7 +14,7 @@ side at the seminar. Target user (instructor, 2026-09-11): a **non-coding domain
 Claude Desktop (subscription, no API key), Claude Code as the build/verification client.
 
 Decisions taken 2026-09-12 (instructor): intent-grouped tools (~12), **tools-only** — no free-SQL tool in v1
-(Ephraim's slide 14: the database's traps live inside the tools; an agent writing its own SQL misses them),
+(the course owner's slide 14: the database's traps live inside the tools; an agent writing its own SQL misses them),
 label `[M1]` + 0.14.0 so the analytical-depth arc (P14+) is never renumbered, everything inside this repo.
 
 ## What ships
@@ -31,7 +31,7 @@ error must not take the actions down). Only `server.py` imports the SDK.
 | `register.py` | The Claude Desktop config merge (keeps every other server, backs the file up, refuses invalid JSON with exit 2, `--print-only` for the "Desktop is running" path). Python, because Windows PowerShell 5.1 has no hashtable JSON round-trip. |
 | `knowledge/rules.md` | The golden rules as a static resource (knowledge, not data; only the published verification numbers). |
 
-### The catalog (Ephraim's table, for the seminar)
+### The catalog (the course owner's table, for the seminar)
 
 | tool | params | what it does | actions behind |
 |---|---|---|---|
@@ -72,7 +72,7 @@ annotations and no wrapper parameters.
   the explicit packages list; `mcp/knowledge/*.md` package-data.
 - `install-plugin.ps1 -Mcp [-DbPath …] [-McpConfigPath …]`: pip-installs the SDK (internet, like xgboost),
   verifies `import mcp` + the server module, then registers the server in `%APPDATA%\Claude\claude_desktop_config.json`
-  through `register.py` — refusing to write while `Claude.exe` runs (Ephraim's slide-19 stumble) and printing
+  through `register.py` — refusing to write while `Claude.exe` runs and printing
   the entry to paste instead; always prints the Claude Code line (`claude mcp add --scope user roadsafety …`).
 - Also fixed here: the installer's verify block still looked for module/page id `accidents` after the rename
   (every fresh install would have died with "actions or page are missing"); preflight's `N_ACTIONS` was 26
@@ -81,8 +81,8 @@ annotations and no wrapper parameters.
 ## CBS transit (flagged, not a blocker)
 
 Tool outputs (aggregate tables, PNGs) travel to Anthropic's API when used from Claude Desktop/Code — the same
-transit our own build sessions have used throughout. Row-level faces are excluded. Use by anyone beyond the
-instructor and Ephraim waits for Ephraim's word; written into README and GUIDE.
+transit our own build sessions have used throughout. Row-level faces are excluded. The same transit
+the app's own chat tab has always had; written into README and GUIDE.
 
 ## Verification
 

@@ -348,8 +348,8 @@ Good ("  nl2sql-roadsafety-lab " + $info.version + " - " + $info.actions + $(if 
       $(if ($info.mcp) { " - mcp " + $info.mcp } else { "" }))
 
 # -- 4b. the chat channel: register the server with Claude Desktop (and say how for Claude Code) ------------
-# The config file is JSON that Claude Desktop rewrites while it runs (Ephraim's slide-19 stumble: a running
-# Desktop overwrote his edit). So: refuse while Claude.exe runs, back the file up, merge one entry, ASCII only.
+# The config file is JSON that Claude Desktop rewrites while it runs (a running Desktop overwrites a hand
+# edit). So: refuse while Claude.exe runs, back the file up, merge one entry, ASCII only.
 if ($Mcp -and $mcpOk) {
     Step "[4b] registering the chat channel"
     $exe = Join-Path $app ".venv\Scripts\roadsafety-mcp.exe"

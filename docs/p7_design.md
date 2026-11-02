@@ -7,7 +7,7 @@ and the stage is verified. P7 closes the pathfinder: the pitfall ledger becomes 
 participant-scoping input gets written, the handoff docs (README/CHANGELOG) land, version goes to **0.7.0**, the
 release wheel is built FROM THE COMMITTED TREE (no index publish — that needs your explicit yes, later), and the
 `context\` pack is refreshed so any future session starts warm. Commit `[P7]`, tag `v0.7`. Data-dir state: shared
-seeded, unchanged. After P7 the remaining work is yours: the two projector rehearsals (Efraim's date) and the
+seeded, unchanged. After P7 the remaining work is yours: the two projector rehearsals (the course owner's date) and the
 participant-scoping decision (which `participants.md` feeds).
 
 ## Deliverables
@@ -34,8 +34,8 @@ participant-scoping decision (which `participants.md` feeds).
    constant — this bump is the test of that note). Suite re-run (285 expected).
 5. **Context refresh** (in `accidents-lab\context\`, allowed — not `app\`):
    a status header on `PROMPT_TASK4_PATHFINDER_KICKOFF.md` (agenda SETTLED; the plugin repo's `docs/plan.md`,
-   `CLAUDE.md`, `PITFALLS.md`, `docs/demo/DEMO.md` are now the authoritative state; open externals: Efraim's
-   date + the scoping decision);
+   `CLAUDE.md`, `PITFALLS.md`, `docs/demo/DEMO.md` are now the authoritative state; open externals: the course
+   owner's date + the scoping decision);
    an addendum section on `DOSSIER_TASK4_ACCIDENTS_DB.md`: what the build AMENDED or discovered beyond the dossier
    (the `road_km = 0` both-sides rule and 70.4 % coverage, the `99999999` junction sentinel, the one-row street-pair
    rule, the shape-code-9 timeline 5 %→24 %→47 %, the 2009 involved gap handling, the fleet-cohort undercount in

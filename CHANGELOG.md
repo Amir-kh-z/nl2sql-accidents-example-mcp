@@ -83,7 +83,7 @@ The instructor wants to work from claude.ai in Chrome, not Desktop. A browser re
   passphrase, empty name, stale login, one-use and expired codes, wrong PKCE, foreign Host —, refresh
   rotation, persistence incl. a corrupt store, MCP calls with a bearer and the audit `user`, CLI validation).
 - CBS: aggregate answers and PNGs transit Anthropic's API like any chat message; row-level faces stay excluded;
-  use beyond the two plugin owners waits for the course owner's word (README, GUIDE §8).
+  the same transit the app's own chat tab has always had (README, GUIDE §8).
 
 ## unreleased — 2026-09-23 · 0.14.1: the Claude Desktop config path is detected, not assumed
 The first real Desktop registration (the instructor's machine) wrote to `%APPDATA%\Claude\...` and Desktop
@@ -96,7 +96,7 @@ never saw it: the Microsoft-Store (MSIX) build virtualizes Roaming and reads
   and `$env:APPDATA` is PowerShell, not cmd. Two new tests; wheel 0.14.1 in `release\`.
 
 ## v0.14 — 2026-09-23 · M1: the MCP server — the same actions from Claude's chat (0.14.0, commit `9a3f70c`, tag `v0.14`)
-Ephraim's second use case (his deck: one server, three channels — page, chat, automation; the core imported
+The course owner's second use case (his deck: one server, three channels — page, chat, automation; the core imported
 in-process). Design + as-built: `docs/m1_design.md`. SOLO build, no agent fan-outs.
 - **`nl2sql_roadsafety/mcp/`** — `runner` (engine `Context` + `Registry` in-process, exactly as the app's
   adapters; DB path from `--db` / `$NL2SQL_ROADSAFETY_DB`; one audit line per call in `accidents/mcp_audit.jsonl`,
@@ -123,7 +123,7 @@ The instructor's call, and the last thing blocking co-installability with the co
   (import package, moved with `git mv` so history follows) · module id `accidents` → **`roadsafety`** ·
   page entry point and URL `/page/accidents/` → **`/page/roadsafety/`** (Vite `base` moved with it) ·
   sidebar label → **🚦 מעבדת הבטיחות בדרכים**, which every CBS credit line already carried.
-- All four had to change together: Ephraim's plugin claims the same dist name, package, module id and
+- All four had to change together: the course owner's plugin claims the same dist name, package, module id and
   page id, and any single collision makes the two uninstallable side by side.
 - Untouched on purpose: the repo folder name, the frozen per-phase design docs (history), and the
   `accidents/<name>` chart-spec strings (internal to our own Python↔page contract).
@@ -217,7 +217,7 @@ wave. Instructor's policy change: **offline is no longer required** — online t
   default values; plus the closed-`<details>` zero-width plotly draw, current-values prefill (Form `onValues`),
   the row-1 stray separator, dark-theme token fixes, window-carrying LRM-pinned labels, and doc/comment drift.
 
-Private plugin for the Israel road-accidents database (CBS) on the NL2SQL closed core. Versions are immutable
+Plugin for the Israel road-accidents database (CBS) on the NL2SQL closed core. Versions are immutable
 once tagged; releases are built only from committed trees. Full per-phase detail (deviations included) lives in
 `docs/plan.md`; every stumble in `PITFALLS.md` (categorized).
 

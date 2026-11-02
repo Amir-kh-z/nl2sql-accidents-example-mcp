@@ -6,14 +6,14 @@
 > Desktop, and the numbers to check are those in `docs/mcp_acceptance.md` and in the README's question set.
 
 **The take:** one conversation in Claude Desktop over the `roadsafety` connector — the ten steps of the deck's last
-slide (`mcp_roadsafety_he.pptx`, slide 17), in that order. Made for the course participants and Ephraim; the
+slide (`mcp_roadsafety_he.pptx`, slide 17), in that order. Made for the course participants; the
 instructor drives. The expected values are the pinned acceptance numbers (`docs/mcp_acceptance.md`, pinned
 2026-10-16 against the seeded registry). Check the numbers, not the wording — the model's prose varies per take.
 
 **CBS rules for the video.** Internal use: data at any level may appear on screen, but keep the frames to charts,
 rankings and cards (no map points layer, no popups — the seminar's frame rule in `DEMO.md`). Open on the deck's
 title or agenda slide (the footer carries the CBS credit) and let at least one answer's credit line be readable.
-Share the file internally (class, Ephraim) — never a public site, never git.
+Share the video with the class; it is not part of this repository.
 
 ## 0 · Pre-flight (T−20 min)
 

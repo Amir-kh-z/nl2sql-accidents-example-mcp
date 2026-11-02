@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""The core as an in-process service provider (Ephraim's slide 6): no port 8000, no HTTP — the engine's
+"""The core as an in-process service provider (the course owner's slide 6): no port 8000, no HTTP — the engine's
 own Context + Registry run the plugin's actions exactly as the app's adapters do (default filling,
 validation and exception wrapping are the core's). Every tool call leaves one audit line
 (`accidents/mcp_audit.jsonl` under the shared data dir): what was asked, which actions ran, how long,

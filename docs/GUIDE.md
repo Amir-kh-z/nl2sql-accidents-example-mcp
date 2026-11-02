@@ -316,8 +316,8 @@ things to know when you read a chat answer instead of the page:
   (Claude Code: `claude mcp add … -e NL2SQL_CORE_DATA_DIR=c:\tmp\rs-mcp-data …`). Train/deploy from chat always
   stops at a `# ⏸ נדרש אישור` card until the person says yes and the tool is called with `confirm=true`.
 - **Transit.** Tool outputs (aggregates, PNGs) go to the LLM provider like any chat message; row-level faces
-  (`map_scene`, individual accident points) are not exposed. Wider use than the two plugin owners waits for
-  Ephraim's word on the CBS side.
+  (`map_scene`, individual accident points) are not exposed. The same transit the app's own chat tab
+  has always had; the README states it plainly.
 
 Debugging: run the server by hand — `..\app\.venv\Scripts\python -m nl2sql_roadsafety.mcp.server --db <path>`
 talks the protocol on stdout (nothing else may print there; logs go to stderr). `tests/test_mcp_server.py`

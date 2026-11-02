@@ -2,8 +2,8 @@
 
 **English** · [עברית](README.he.md)
 
-**PRIVATE — course material. Not for publication or redistribution.** The database is never part of this
-repository, of any package, or of any cloud service.
+**Course material, shared as code and documentation.** The database (CBS licence) is never part of this
+repository, of any package, or of any cloud service; the documents quote aggregate figures only.
 
 This is the **complete** Road Safety Lab plugin for the NL2SQL closed-core app over the Israel road-accidents
 database (CBS — הלשכה המרכזית לסטטיסטיקה): thirty correct-by-construction actions, an RTL page with seven tabs,
@@ -35,6 +35,30 @@ this README pair, a rule sheet for your agent (`CLAUDE.md`) and a model-seeding 
   itself installs from the packaged wheel, offline.
 - **For the chat channel**: Claude Code (you already have it — the VS Code extension or the terminal CLI) and/or
   Claude Desktop.
+
+## Before you start — one app, nothing copied
+
+Seven rules keep the kit from touching your own work. It installs **beside** your plugin, never into it.
+
+- **One app.** Install into the app clone you already have. Do not copy the app folder (its environment carries
+  absolute paths and stops working), and do not clone a second one: every app copy on a machine serves port 8000 and
+  shares the same state folder, so a second copy isolates nothing and only hides the new tab from you.
+- **Stop the app first** (Ctrl+C in its window), and quit Claude Desktop fully (tray icon → Quit). An install under
+  a running app or chat server leaves a half-installed package. Start the app again after the three double-clicks.
+- **The database stays where it is.** It is opened read-only through the connection the app already has, and both
+  plugins use that one connection. Do not copy the file, do not add a second connection.
+- **Names.** This plugin is distribution `nl2sql-roadsafety-lab`, module id `roadsafety`, data folder `accidents\`
+  — none of which the starter kit uses. If you built a plugin from scratch and it happens to use one of these
+  names, rename yours before installing.
+- **The core.** The installer may offer to upgrade `nl2sql-core` to 1.6.0 (the sidebar page needs it). The starter
+  kit accepts any 1.x core, so your plugin keeps running. Beyond its own package, xgboost and the MCP SDK, this is
+  the only change the kit makes to your environment.
+- **Steal freely — with your own names.** Copy any code into your plugin; `docs/BUILD_YOUR_OWN_MCP.md` names the
+  generic files and what to rename in each. Keep your own package name, module id, server name and data-folder
+  prefix, so the two plugins never write into each other's ledger or model registry.
+- **Removing it** is one line in the app's environment: `..\app\.venv\Scripts\python -m pip uninstall -y
+  nl2sql-roadsafety-lab`; then `claude mcp remove roadsafety -s user`, delete the `roadsafety` entry from Claude
+  Desktop's config file, and start the app again.
 
 ## Install — three double-clicks
 

@@ -1,6 +1,6 @@
 # DOSSIER — Israel Road Accidents Database (Task 4)
 
-**Surveyed 2026-08-26** from `C:\Users\A\Desktop\תאונות דרכים דאטהבייס` (read-only).
+**Surveyed 2026-08-26** from the pristine CBS delivery folder (read-only).
 Sources: `קרא-אותי.md` (install README), `docs/db-tables-report.html` (inventory + variable
 dictionary), `docs/methodology-report.html` (analysis methodology, ~14 sections),
 `semantic_layer.yaml` + `israel_accidents.semantic.json` (NL2SQL semantic layer),
@@ -36,7 +36,7 @@ CBS microdata under the user's personal CBS approval:
 1. **Never** transfer the database to anyone else.
 2. **Never** upload it to any public service, shared cloud, or **git** — the plugin repo
    ships code and knowledge, never data. (This dossier contains only aggregate figures,
-   which are fine; keep the repo private regardless until decided otherwise.)
+   which are fine to publish; the data itself never is.)
 3. Rows are individual-level — **publications at aggregate level only**.
 4. Every product/publication credits the CBS (הלשכה המרכזית לסטטיסטיקה).
 
@@ -372,7 +372,7 @@ is exactly what a Task-4 plugin can become inside the NL2SQL app.
   models inside a plugin raises registry/artifact questions (where do artifacts live —
   `ctx.data_dir()`?).
 - Does the core need anything (parked core changes from Task 3, e.g. `log_activity`)?
-- Efraim's "15 steps" definition-of-done list is still missing (also open from Task 3).
+- The course owner's "15 steps" definition-of-done list is still missing (also open from Task 3).
 
 ---
 
